@@ -1,0 +1,14 @@
+---
+import { skills } from '../data/skills';
+---
+<section id="dev-skills" class="container section">
+  <h2 class="section__title">Skills</h2>
+  <dl class="skills">
+    {skills.map((g) => (
+      <div class="skills__group">
+        <dt>{g.label}</dt>
+        <dd><ul class="skills__list">{g.items.map((i) => <li>{i}</li>)}</ul></dd>
+      </div>
+    ))}
+  </dl>
+</section>

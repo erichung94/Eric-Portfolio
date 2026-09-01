@@ -1,0 +1,18 @@
+---
+import { work } from '../data/work';
+---
+<section id="dev-work" class="container section">
+  <h2 class="section__title">Work</h2>
+  <ol class="work">
+    {work.map((c) => (
+      <li class="work__item">
+        <p class="work__meta">{c.org} · {c.year}</p>
+        <h3 class="work__title">{c.title}</h3>
+        <p><strong>Problem.</strong> {c.problem}</p>
+        <p><strong>Built.</strong> {c.build}</p>
+        <p><strong>Result.</strong> {c.result}</p>
+        <ul class="work__tags">{c.tags.map((t) => <li>{t}</li>)}</ul>
+      </li>
+    ))}
+  </ol>
+</section>
