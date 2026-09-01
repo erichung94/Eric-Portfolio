@@ -1,10 +1,13 @@
 ---
 import { profile } from '../data/profile';
-import { lessons } from '../data/lessons';
-const { scope } = Astro.props as { scope: 'dev' | 'dance' };
+import { bookingHref } from '../data/lessons';
+
+interface Props {
+  scope: 'dev' | 'dance';
+}
+
+const { scope } = Astro.props;
 const copy = scope === 'dev' ? profile.dev : profile.dance;
-const bookingHref =
-  `mailto:${lessons.bookingEmail}?subject=${encodeURIComponent(lessons.bookingSubject)}`;
 ---
 <section class={`hero container hero--${scope}`}>
   <div class="hero__text">

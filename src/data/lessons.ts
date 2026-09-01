@@ -6,3 +6,6 @@ export const lessons = {
   bookingEmail: 'erichung.94@gmail.com',
   bookingSubject: 'West Coast Swing lesson inquiry',
 } as const;
+
+export const bookingHref =
+  `mailto:${lessons.bookingEmail}?subject=${encodeURIComponent(lessons.bookingSubject)}`;

@@ -7,7 +7,11 @@ import DevSections from '../components/DevSections.astro';
 import DanceSections from '../components/DanceSections.astro';
 import type { Mode } from '../lib/mode';
 
-const { mode } = Astro.props as { mode: Mode };
+interface Props {
+  mode: Mode;
+}
+
+const { mode } = Astro.props;
 const meta = {
   dev: {
     title: 'Eric Hung — Full-stack developer',

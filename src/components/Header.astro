@@ -1,7 +1,12 @@
 ---
 import ModeSwitch from './ModeSwitch.tsx';
 import type { Mode } from '../lib/mode';
-const { mode } = Astro.props as { mode: Mode };
+
+interface Props {
+  mode: Mode;
+}
+
+const { mode } = Astro.props;
 const devNav = [
   ['#dev-work', 'Work'], ['#dev-skills', 'Skills'], ['#dev-about', 'About'], ['#dev-contact', 'Contact'],
 ];

@@ -1,6 +1,11 @@
 ---
 import { profile } from '../data/profile';
-const { scope } = Astro.props as { scope: 'dev' | 'dance' };
+
+interface Props {
+  scope: 'dev' | 'dance';
+}
+
+const { scope } = Astro.props;
 const { email, github, linkedin, instagram } = profile.links;
 ---
 <section id={`${scope}-contact`} class="container section">
@@ -9,11 +14,11 @@ const { email, github, linkedin, instagram } = profile.links;
     <li><a href={`mailto:${email}`}>{email}</a></li>
     {scope === 'dev' && (
       <>
-        <li><a href={github}>GitHub</a></li>
-        <li><a href={linkedin}>LinkedIn</a></li>
+        <li><a href={github} target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href={linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
       </>
     )}
-    {scope === 'dance' && instagram && <li><a href={instagram}>Instagram</a></li>}
+    {scope === 'dance' && instagram && <li><a href={instagram} target="_blank" rel="noopener">Instagram</a></li>}
   </ul>
 </section>
 <style>
