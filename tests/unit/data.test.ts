@@ -6,7 +6,7 @@ import { skills } from '../../src/data/skills';
 import { lessons } from '../../src/data/lessons';
 
 describe('tokens.css', () => {
-  const css = readFileSync('src/styles/tokens.css', 'utf8');
+  const css = readFileSync(new URL('../../src/styles/tokens.css', import.meta.url), 'utf8');
   it('defines both mode scopes', () => {
     expect(css).toContain(':root {');
     expect(css).toContain(":root[data-mode='dance']");
@@ -15,6 +15,10 @@ describe('tokens.css', () => {
     for (const name of ['--bg', '--fg', '--fg-muted', '--accent', '--accent-strong', '--accent-on', '--rule', '--container-max', '--container-pad']) {
       expect(css).toContain(name);
     }
+  });
+  it('sets the container max width to 1100px', () => {
+    const match = css.match(/--container-max:\s*([^;]+);/);
+    expect(match?.[1].trim()).toBe('1100px');
   });
   it('reduced-motion disables the theme transition', () => {
     expect(css).toContain('prefers-reduced-motion: reduce');

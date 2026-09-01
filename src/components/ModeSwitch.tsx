@@ -48,7 +48,7 @@ export default function ModeSwitch({ current }: { current: Mode }) {
           {i === 1 && <span className="mode-switch__seam" aria-hidden="true" />}
           <button
             type="button"
-            className={`mode-switch__btn${m === mode ? ' is-active' : ''}`}
+            className="mode-switch__btn"
             aria-pressed={m === mode}
             data-mode-target={m}
             onClick={() => choose(m)}

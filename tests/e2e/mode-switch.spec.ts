@@ -52,7 +52,7 @@ test.describe('mode switch', () => {
     const page = await context.newPage();
     await page.goto('/');
     await page.getByRole('button', { name: 'Dancer' }).click();
-    await expect(page.locator('html')).not.toHaveClass(/theme-transition/);
+    expect((await page.locator('html').getAttribute('class')) ?? '').not.toContain('theme-transition');
     await expect(page.locator('html')).toHaveAttribute('data-mode', 'dance');
     await context.close();
   });

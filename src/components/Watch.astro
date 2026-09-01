@@ -10,6 +10,7 @@ const hasMedia = videos.length > 0 || gallery.length > 0;
       {videos.map((v) => (
         <figure class="watch__video">
           <iframe src={v.embedUrl} title={v.title} loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
                   allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe>
           <figcaption>{v.title}</figcaption>
         </figure>

@@ -55,15 +55,13 @@
 
 /* Theme transition: only active while the .theme-transition class is on <html> */
 html.theme-transition,
-html.theme-transition body,
-html.theme-transition .theme-tint {
+html.theme-transition body {
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html.theme-transition,
-  html.theme-transition body,
-  html.theme-transition .theme-tint {
+  html.theme-transition body {
     transition: none;
   }
 }
