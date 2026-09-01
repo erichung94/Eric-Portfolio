@@ -53,7 +53,7 @@ a { color: var(--accent-strong); }
 .mode-switch__btn {
   appearance: none; background: none; border: 0; cursor: pointer;
   font: inherit; font-size: 16px; letter-spacing: 0.02em; color: inherit;
-  padding: 2px 18px; line-height: 1.15; opacity: 0.34; font-weight: 450;
+  padding: 2px 18px; line-height: 1.15; opacity: 0.62; font-weight: 450;
 }
 .mode-switch__btn:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; }
 /* Active styling is derived from the live data-mode, not the React prop */
