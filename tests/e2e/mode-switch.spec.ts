@@ -7,6 +7,9 @@ test.describe('mode switch', () => {
     await expect(page.locator('[data-scope="dev"]').first()).toBeVisible();
     await expect(page.locator('[data-scope="dance"]').first()).toBeHidden();
 
+    await expect(page.getByRole('button', { name: 'Developer' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: 'Dancer' })).toHaveAttribute('aria-pressed', 'false');
+
     let reloaded = false;
     page.on('load', () => (reloaded = true));
 
@@ -16,7 +19,15 @@ test.describe('mode switch', () => {
     await expect(page).toHaveURL(/\/dancer$/);
     await expect(page.locator('[data-scope="dance"]').first()).toBeVisible();
     await expect(page.locator('[data-scope="dev"]').first()).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Dancer' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: 'Developer' })).toHaveAttribute('aria-pressed', 'false');
     expect(reloaded).toBe(false);
+
+    await page.getByRole('button', { name: 'Developer' }).click();
+
+    await expect(page.locator('html')).toHaveAttribute('data-mode', 'dev');
+    await expect(page.getByRole('button', { name: 'Developer' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('button', { name: 'Dancer' })).toHaveAttribute('aria-pressed', 'false');
   });
 
   test('clicking the active side is a no-op', async ({ page }) => {

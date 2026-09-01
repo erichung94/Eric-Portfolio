@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { pathForMode, type Mode } from '../lib/mode';
 
 const ORDER: Mode[] = ['dev', 'dance'];
@@ -15,22 +15,30 @@ function applyMode(next: Mode, animate: boolean) {
   window.scrollTo({ top: 0, behavior: 'auto' });
 }
 
+function modeFromLocation(): Mode {
+  const path = window.location.pathname.toLowerCase().replace(/\/+$/, '');
+  return path === '/dancer' ? 'dance' : 'dev';
+}
+
 export default function ModeSwitch({ current }: { current: Mode }) {
+  const [mode, setMode] = useState<Mode>(current);
+
   useEffect(() => {
     function onPop() {
-      const path = window.location.pathname.toLowerCase().replace(/\/+$/, '');
-      applyMode(path === '/dancer' ? 'dance' : 'dev', false);
+      const next = modeFromLocation();
+      applyMode(next, false);
+      setMode(next);
     }
     window.addEventListener('popstate', onPop);
     return () => window.removeEventListener('popstate', onPop);
   }, []);
 
   function choose(next: Mode) {
-    const root = document.documentElement;
-    if ((root.dataset.mode as Mode) === next) return; // no-op on active side
+    if (mode === next) return; // no-op on active side
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     applyMode(next, !reduce);
     history.pushState({}, '', pathForMode(next));
+    setMode(next);
   }
 
   return (
@@ -40,8 +48,8 @@ export default function ModeSwitch({ current }: { current: Mode }) {
           {i === 1 && <span className="mode-switch__seam" aria-hidden="true" />}
           <button
             type="button"
-            className={`mode-switch__btn${m === current ? ' is-active' : ''}`}
-            aria-pressed={m === current}
+            className={`mode-switch__btn${m === mode ? ' is-active' : ''}`}
+            aria-pressed={m === mode}
             data-mode-target={m}
             onClick={() => choose(m)}
           >
