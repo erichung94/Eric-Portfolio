@@ -33,10 +33,16 @@ a { color: var(--accent-strong); }
 :root[data-mode='dev'] [data-scope='dance'] { display: none; }
 :root[data-mode='dance'] [data-scope='dev'] { display: none; }
 
-/* Header */
-.site-header { position: sticky; top: 0; z-index: 50; }
-.site-header__inner { padding-block: 14px 10px; }
+/* Header. Large on landing, shrinks to compact once you scroll past the hero. */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  --switch-scale: 2.8;
+  --nav-scale: 1.8;
+}
+.site-header.is-scrolled { --switch-scale: 1; --nav-scale: 1; }
+.site-header__inner { padding-block: 26px 18px; transition: padding 0.28s ease; }
 .site-header.is-scrolled .site-header__inner {
+  padding-block: 14px 10px;
   background: color-mix(in srgb, var(--bg) 82%, transparent);
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--rule);
@@ -55,14 +61,17 @@ a { color: var(--accent-strong); }
 }
 .mode-switch__btn {
   appearance: none; background: none; border: 0; cursor: pointer;
-  font: inherit; font-size: 16px; letter-spacing: 0.02em; color: inherit;
-  padding: 2px 18px; line-height: 1.15; opacity: 0.62; font-weight: 450;
+  font: inherit; font-size: calc(16px * var(--switch-scale, 1));
+  letter-spacing: 0.02em; color: inherit;
+  padding: 0.12em 1.1em; line-height: 1.15; opacity: 0.62; font-weight: 450;
   flex: 0 0 auto; min-width: 7em; white-space: nowrap;
+  transition: font-size 0.28s ease;
 }
 /* Hug the divider: each label sits the same distance from the centre seam,
-   regardless of word length or which side is bold. */
-.mode-switch__btn[data-mode-target='dev'] { text-align: right; padding-right: 16px; }
-.mode-switch__btn[data-mode-target='dance'] { text-align: left; padding-left: 16px; }
+   regardless of word length or which side is bold. (em keeps the gap in
+   proportion as the header scales.) */
+.mode-switch__btn[data-mode-target='dev'] { text-align: right; padding-right: 0.9em; }
+.mode-switch__btn[data-mode-target='dance'] { text-align: left; padding-left: 0.9em; }
 .mode-switch__btn:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; }
 /* Active styling is derived from the live data-mode, not the React prop */
 :root[data-mode='dev'] .mode-switch__btn[data-mode-target='dev'],
@@ -71,16 +80,30 @@ a { color: var(--accent-strong); }
 }
 
 /* Section nav */
-.mode-nav { display: flex; justify-content: center; gap: 24px; margin-top: 12px; }
+.mode-nav {
+  display: flex; justify-content: center;
+  gap: calc(24px * var(--nav-scale, 1));
+  margin-top: calc(12px * var(--nav-scale, 1));
+  transition: gap 0.28s ease, margin-top 0.28s ease;
+}
 .mode-nav a {
-  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  font-size: calc(11px * var(--nav-scale, 1));
+  letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--fg-muted); text-decoration: none;
+  transition: font-size 0.28s ease;
 }
 .mode-nav a:hover { color: var(--fg); }
 
+@media (prefers-reduced-motion: reduce) {
+  .site-header__inner, .mode-switch__btn, .mode-nav, .mode-nav a { transition: none; }
+}
+
 @media (max-width: 640px) {
-  .mode-switch__btn { font-size: 15px; padding-inline: 12px; }
-  .mode-nav { gap: 14px; flex-wrap: wrap; }
+  /* Dial the landing size back so the big switch does not overflow small screens */
+  .site-header { --switch-scale: 1.35; --nav-scale: 1.15; }
+  .site-header.is-scrolled { --switch-scale: 1; --nav-scale: 1; }
+  .mode-switch__btn { min-width: 6em; }
+  .mode-nav { flex-wrap: wrap; }
 }
 
 /* Hero */
