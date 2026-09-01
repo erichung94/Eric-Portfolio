@@ -36,10 +36,10 @@ describe('content data', () => {
     expect(profile.links.email).toBe('erichung.94@gmail.com');
   });
 
-  it('work has exactly 4 fully-populated case studies with unique slugs', () => {
-    expect(work).toHaveLength(4);
+  it('work has exactly 5 fully-populated case studies with unique slugs', () => {
+    expect(work).toHaveLength(5);
     const slugs = new Set(work.map((w) => w.slug));
-    expect(slugs.size).toBe(4);
+    expect(slugs.size).toBe(5);
     for (const w of work) {
       for (const field of ['title', 'org', 'year', 'problem', 'build', 'result'] as const) {
         expect(w[field].length).toBeGreaterThan(0);

@@ -12,6 +12,13 @@ import { work } from '../data/work';
         <p><strong>Built.</strong> {c.build}</p>
         <p><strong>Result.</strong> {c.result}</p>
         <ul class="work__tags">{c.tags.map((t) => <li>{t}</li>)}</ul>
+        {c.links && (
+          <p class="work__links">
+            {c.links.map((l) => (
+              <a href={l.href} target="_blank" rel="noopener">{l.label}</a>
+            ))}
+          </p>
+        )}
       </li>
     ))}
   </ol>

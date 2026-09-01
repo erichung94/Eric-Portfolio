@@ -57,8 +57,12 @@ a { color: var(--accent-strong); }
   appearance: none; background: none; border: 0; cursor: pointer;
   font: inherit; font-size: 16px; letter-spacing: 0.02em; color: inherit;
   padding: 2px 18px; line-height: 1.15; opacity: 0.62; font-weight: 450;
-  flex: 0 0 auto; min-width: 7em; text-align: center; white-space: nowrap;
+  flex: 0 0 auto; min-width: 7em; white-space: nowrap;
 }
+/* Hug the divider: each label sits the same distance from the centre seam,
+   regardless of word length or which side is bold. */
+.mode-switch__btn[data-mode-target='dev'] { text-align: right; padding-right: 16px; }
+.mode-switch__btn[data-mode-target='dance'] { text-align: left; padding-left: 16px; }
 .mode-switch__btn:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; }
 /* Active styling is derived from the live data-mode, not the React prop */
 :root[data-mode='dev'] .mode-switch__btn[data-mode-target='dev'],
