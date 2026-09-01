@@ -1,0 +1,40 @@
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --fg: #0f172a;
+  --fg-muted: #475569;
+  --rule: rgba(15, 23, 42, 0.10);
+  /* Blue A — light mode: sky accent. Body text/links use --accent-strong for AA contrast. */
+  --accent: #38b6f0;
+  --accent-strong: #1f7fb0;
+  --accent-on: #08243a;
+  --container-max: 1100px;
+  --container-pad: clamp(20px, 5vw, 48px);
+}
+
+:root[data-mode='dance'] {
+  color-scheme: dark;
+  --bg: #0b0b0f;
+  --fg: #e9e9f2;
+  --fg-muted: #a1a1b3;
+  --rule: rgba(255, 255, 255, 0.10);
+  /* Blue A — dark mode: navy accent for fills; --accent-strong lifted for AA text contrast on near-black. */
+  --accent: #2f47a8;
+  --accent-strong: #8ea6de;
+  --accent-on: #ffffff;
+}
+
+/* Theme transition: only active while the .theme-transition class is on <html> */
+html.theme-transition,
+html.theme-transition body,
+html.theme-transition .theme-tint {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transition,
+  html.theme-transition body,
+  html.theme-transition .theme-tint {
+    transition: none;
+  }
+}
