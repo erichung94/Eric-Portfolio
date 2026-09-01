@@ -9,4 +9,5 @@ test('per-route title, canonical, and og:image', async ({ page }) => {
   await page.goto('/dancer');
   await expect(page).toHaveTitle(/West Coast Swing instructor/);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://erichung.dev/dancer');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://erichung.dev/images/og-dance.png');
 });
