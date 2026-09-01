@@ -14,6 +14,6 @@ export const profile = {
     linkedin: 'https://www.linkedin.com/in/erichung-tech',
     instagram: '', // Eric to supply; Contact section hides the link while empty
   },
-  headshot: '/images/headshot.jpg',
+  headshot: '/images/headshot.png',
   resume: '/EricHung_Resume.pdf',
 } as const;
