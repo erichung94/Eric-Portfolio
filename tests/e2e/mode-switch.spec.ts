@@ -56,4 +56,14 @@ test.describe('mode switch', () => {
     await expect(page.locator('html')).toHaveAttribute('data-mode', 'dance');
     await context.close();
   });
+
+  test('hero text and CTAs differ per mode', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-scope="dev"] .hero__tagline')).toHaveText('dev by day…');
+    await expect(page.locator('[data-scope="dev"] .hero__cta')).toContainText('View work');
+
+    await page.goto('/dancer');
+    await expect(page.locator('[data-scope="dance"] .hero__tagline')).toHaveText('…dancer by night');
+    await expect(page.locator('[data-scope="dance"] .hero__cta a')).toHaveAttribute('href', /^mailto:erichung\.94@gmail\.com/);
+  });
 });

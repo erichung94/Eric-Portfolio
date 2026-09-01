@@ -1,0 +1,27 @@
+---
+import { profile } from '../data/profile';
+import { lessons } from '../data/lessons';
+const { scope } = Astro.props as { scope: 'dev' | 'dance' };
+const copy = scope === 'dev' ? profile.dev : profile.dance;
+const bookingHref =
+  `mailto:${lessons.bookingEmail}?subject=${encodeURIComponent(lessons.bookingSubject)}`;
+---
+<section class={`hero container hero--${scope}`}>
+  <div class="hero__text">
+    <p class="hero__eyebrow">{copy.eyebrow}</p>
+    <h1 class="hero__name">{profile.name.first} <em>{profile.name.last}</em></h1>
+    <p class="hero__tagline">{copy.tagline}</p>
+    <p class="hero__cta">
+      {scope === 'dev' ? (
+        <>
+          <a class="btn" href="#dev-work">View work</a>
+          <a class="btn btn--ghost" href={profile.resume} download>Résumé</a>
+        </>
+      ) : (
+        <a class="btn" href={bookingHref}>Book a lesson</a>
+      )}
+    </p>
+  </div>
+  <img class="hero__shot" src={profile.headshot} width="230" height="230"
+       alt={scope === 'dev' ? 'Eric Hung' : 'Eric Hung dancing'} />
+</section>
