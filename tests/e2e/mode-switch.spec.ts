@@ -1,31 +1,37 @@
 import { test, expect, type Page } from '@playwright/test';
 
-// Wait until the ModeSwitch React island has finished client hydration.
-// Astro stamps `client-render-time` on the <astro-island> once hydration completes;
-// clicking the switch before that races the (not-yet-attached) React handler.
-async function gotoReady(page: Page, path = '/') {
+// Click a switch label and wait for the mode to actually change. The click is
+// retried: a click that lands before the `client:load` React island has hydrated
+// would otherwise do nothing (handler not yet attached) and flake the test.
+async function switchMode(page: Page, label: 'Developer' | 'Dancer', expected: 'dev' | 'dance') {
+  await expect(async () => {
+    await page.getByRole('button', { name: label }).click();
+    await expect(page.locator('html')).toHaveAttribute('data-mode', expected, { timeout: 500 });
+  }).toPass({ timeout: 8000, intervals: [50, 150, 300, 500, 500] });
+}
+
+// Navigate, then guarantee the island is interactive by round-tripping the switch
+// (dev -> dance -> dev). After this returns, clicks are reliable.
+async function gotoHydrated(page: Page, path = '/') {
   await page.goto(path);
-  const island = page.locator('astro-island[component-url*="ModeSwitch"]').first();
-  await island.waitFor();
-  await expect(island).toHaveAttribute('client-render-time', /.+/);
+  await switchMode(page, 'Dancer', 'dance');
+  await switchMode(page, 'Developer', 'dev');
 }
 
 test.describe('mode switch', () => {
   test('swaps theme, content, and URL without reload', async ({ page }) => {
-    await gotoReady(page, '/');
+    await gotoHydrated(page, '/');
     await expect(page.locator('html')).toHaveAttribute('data-mode', 'dev');
     await expect(page.locator('[data-scope="dev"]').first()).toBeVisible();
     await expect(page.locator('[data-scope="dance"]').first()).toBeHidden();
-
     await expect(page.getByRole('button', { name: 'Developer' })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByRole('button', { name: 'Dancer' })).toHaveAttribute('aria-pressed', 'false');
 
     let reloaded = false;
     page.on('load', () => (reloaded = true));
 
-    await page.getByRole('button', { name: 'Dancer' }).click();
+    await switchMode(page, 'Dancer', 'dance');
 
-    await expect(page.locator('html')).toHaveAttribute('data-mode', 'dance');
     await expect(page).toHaveURL(/\/dancer$/);
     await expect(page.locator('[data-scope="dance"]').first()).toBeVisible();
     await expect(page.locator('[data-scope="dev"]').first()).toBeHidden();
@@ -33,23 +39,21 @@ test.describe('mode switch', () => {
     await expect(page.getByRole('button', { name: 'Developer' })).toHaveAttribute('aria-pressed', 'false');
     expect(reloaded).toBe(false);
 
-    await page.getByRole('button', { name: 'Developer' }).click();
-
-    await expect(page.locator('html')).toHaveAttribute('data-mode', 'dev');
+    await switchMode(page, 'Developer', 'dev');
     await expect(page.getByRole('button', { name: 'Developer' })).toHaveAttribute('aria-pressed', 'true');
     await expect(page.getByRole('button', { name: 'Dancer' })).toHaveAttribute('aria-pressed', 'false');
   });
 
   test('clicking the active side is a no-op', async ({ page }) => {
-    await gotoReady(page, '/');
+    await gotoHydrated(page, '/'); // ends in dev mode, island proven interactive
     await page.getByRole('button', { name: 'Developer' }).click();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.locator('html')).toHaveAttribute('data-mode', 'dev');
   });
 
   test('browser back/forward moves between modes', async ({ page }) => {
-    await gotoReady(page, '/');
-    await page.getByRole('button', { name: 'Dancer' }).click();
+    await gotoHydrated(page, '/');
+    await switchMode(page, 'Dancer', 'dance');
     await expect(page).toHaveURL(/\/dancer$/);
     await page.goBack();
     await expect(page.locator('html')).toHaveAttribute('data-mode', 'dev');
@@ -60,7 +64,7 @@ test.describe('mode switch', () => {
   test('reduced motion: no theme-transition class is added', async ({ browser }) => {
     const context = await browser.newContext({ reducedMotion: 'reduce' });
     const page = await context.newPage();
-    await gotoReady(page, '/');
+    await gotoHydrated(page, '/');
     await page.getByRole('button', { name: 'Dancer' }).click();
     expect((await page.locator('html').getAttribute('class')) ?? '').not.toContain('theme-transition');
     await expect(page.locator('html')).toHaveAttribute('data-mode', 'dance');
