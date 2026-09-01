@@ -1,0 +1,28 @@
+---
+import ModeSwitch from './ModeSwitch.tsx';
+import type { Mode } from '../lib/mode';
+const { mode } = Astro.props as { mode: Mode };
+const devNav = [
+  ['#dev-work', 'Work'], ['#dev-skills', 'Skills'], ['#dev-about', 'About'], ['#dev-contact', 'Contact'],
+];
+const danceNav = [
+  ['#dance-lessons', 'Lessons'], ['#dance-watch', 'Watch'], ['#dance-about', 'About'], ['#dance-contact', 'Contact'],
+];
+---
+<header class="site-header">
+  <div class="site-header__inner container">
+    <ModeSwitch client:load current={mode} />
+    <nav class="mode-nav" data-scope="dev" aria-label="Developer sections">
+      {devNav.map(([href, label]) => <a href={href}>{label}</a>)}
+    </nav>
+    <nav class="mode-nav" data-scope="dance" aria-label="Dancer sections">
+      {danceNav.map(([href, label]) => <a href={href}>{label}</a>)}
+    </nav>
+  </div>
+</header>
+<script>
+  const header = document.querySelector('.site-header');
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>

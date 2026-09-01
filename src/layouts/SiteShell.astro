@@ -1,0 +1,50 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import DevSections from '../components/DevSections.astro';
+import DanceSections from '../components/DanceSections.astro';
+import type { Mode } from '../lib/mode';
+
+const { mode } = Astro.props as { mode: Mode };
+const meta = {
+  dev: {
+    title: 'Eric Hung — Full-stack developer',
+    description: 'Full-stack developer in Minneapolis. TypeScript and Node SaaS work, and a few things I have shipped.',
+    og: '/images/og-dev.png',
+  },
+  dance: {
+    title: 'Eric Hung — West Coast Swing instructor',
+    description: 'West Coast Swing dancer and instructor in the Twin Cities. Private lessons for all levels.',
+    og: '/images/og-dance.png',
+  },
+}[mode];
+const canonical = new URL(mode === 'dance' ? '/dancer' : '/', Astro.site).href;
+---
+<!doctype html>
+<html lang="en" data-mode={mode}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={meta.title} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(meta.og, Astro.site).href} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header mode={mode} />
+    <main id="main">
+      <DevSections />
+      <DanceSections />
+    </main>
+    <Footer />
+  </body>
+</html>

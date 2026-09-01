@@ -32,3 +32,45 @@ a { color: var(--accent-strong); }
 /* Scope visibility: show only the tree matching the active mode */
 :root[data-mode='dev'] [data-scope='dance'] { display: none; }
 :root[data-mode='dance'] [data-scope='dev'] { display: none; }
+
+/* Header */
+.site-header { position: sticky; top: 0; z-index: 50; }
+.site-header__inner { padding-block: 14px 10px; }
+.site-header.is-scrolled .site-header__inner {
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Mode switch: floating text, no background, fading seam */
+.mode-switch { display: flex; justify-content: center; align-items: flex-start; }
+.mode-switch__item { display: flex; align-items: stretch; }
+.mode-switch__seam {
+  width: 1px; align-self: stretch; min-height: 2.3em;
+  background: linear-gradient(to bottom, currentColor 0 20%, transparent 100%);
+  opacity: 0.5;
+}
+.mode-switch__btn {
+  appearance: none; background: none; border: 0; cursor: pointer;
+  font: inherit; font-size: 16px; letter-spacing: 0.02em; color: inherit;
+  padding: 2px 18px; line-height: 1.15; opacity: 0.34; font-weight: 450;
+}
+.mode-switch__btn:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; }
+/* Active styling is derived from the live data-mode, not the React prop */
+:root[data-mode='dev'] .mode-switch__btn[data-mode-target='dev'],
+:root[data-mode='dance'] .mode-switch__btn[data-mode-target='dance'] {
+  opacity: 1; font-weight: 700;
+}
+
+/* Section nav */
+.mode-nav { display: flex; justify-content: center; gap: 24px; margin-top: 12px; }
+.mode-nav a {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--fg-muted); text-decoration: none;
+}
+.mode-nav a:hover { color: var(--fg); }
+
+@media (max-width: 640px) {
+  .mode-switch__btn { font-size: 15px; padding-inline: 12px; }
+  .mode-nav { gap: 14px; flex-wrap: wrap; }
+}
