@@ -43,10 +43,10 @@ export default function ModeSwitch({ current }: { current: Mode }) {
 
   return (
     <div className="mode-switch" role="group" aria-label="Choose site mode">
-      {ORDER.map((m, i) => (
-        <span key={m} className="mode-switch__item">
-          {i === 1 && <span className="mode-switch__seam" aria-hidden="true" />}
+      <div className="mode-switch__group">
+        {ORDER.map((m) => (
           <button
+            key={m}
             type="button"
             className="mode-switch__btn"
             aria-pressed={m === mode}
@@ -55,8 +55,9 @@ export default function ModeSwitch({ current }: { current: Mode }) {
           >
             {LABEL[m]}
           </button>
-        </span>
-      ))}
+        ))}
+        <span className="mode-switch__seam" aria-hidden="true" />
+      </div>
     </div>
   );
 }
