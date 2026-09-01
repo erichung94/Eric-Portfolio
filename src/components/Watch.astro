@@ -1,0 +1,24 @@
+---
+import { videos, gallery } from '../data/videos';
+const hasMedia = videos.length > 0 || gallery.length > 0;
+---
+<section id="dance-watch" class="container section">
+  <h2 class="section__title">Watch</h2>
+  {!hasMedia && <p class="watch__soon">Video and photos coming soon.</p>}
+  {videos.length > 0 && (
+    <div class="watch__videos">
+      {videos.map((v) => (
+        <figure class="watch__video">
+          <iframe src={v.embedUrl} title={v.title} loading="lazy"
+                  allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+          <figcaption>{v.title}</figcaption>
+        </figure>
+      ))}
+    </div>
+  )}
+  {gallery.length > 0 && (
+    <ul class="watch__gallery">
+      {gallery.map((g) => <li><img src={g.src} alt={g.alt} loading="lazy" /></li>)}
+    </ul>
+  )}
+</section>

@@ -1,0 +1,11 @@
+---
+import { lessons } from '../data/lessons';
+const bookingHref =
+  `mailto:${lessons.bookingEmail}?subject=${encodeURIComponent(lessons.bookingSubject)}`;
+---
+<section id="dance-lessons" class="container section">
+  <h2 class="section__title">Lessons</h2>
+  <p>{lessons.blurb}</p>
+  <p class="lessons__meta">{lessons.location} · {lessons.rates}</p>
+  <p><a class="btn" href={bookingHref}>Book a lesson</a></p>
+</section>
