@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { profile } from '../../src/data/profile';
+import { work } from '../../src/data/work';
+import { skills } from '../../src/data/skills';
+import { lessons } from '../../src/data/lessons';
 
 describe('tokens.css', () => {
   const css = readFileSync('src/styles/tokens.css', 'utf8');
@@ -14,5 +18,42 @@ describe('tokens.css', () => {
   });
   it('reduced-motion disables the theme transition', () => {
     expect(css).toContain('prefers-reduced-motion: reduce');
+  });
+});
+
+describe('content data', () => {
+  it('profile has both mode blocks and all links keys', () => {
+    expect(profile.dev.eyebrow).toBeTruthy();
+    expect(profile.dev.tagline).toContain('…');
+    expect(profile.dance.tagline).toContain('…');
+    for (const k of ['email', 'github', 'linkedin', 'instagram']) {
+      expect(k in profile.links).toBe(true);
+    }
+    expect(profile.links.email).toBe('erichung.94@gmail.com');
+  });
+
+  it('work has exactly 4 fully-populated case studies with unique slugs', () => {
+    expect(work).toHaveLength(4);
+    const slugs = new Set(work.map((w) => w.slug));
+    expect(slugs.size).toBe(4);
+    for (const w of work) {
+      for (const field of ['title', 'org', 'year', 'problem', 'build', 'result'] as const) {
+        expect(w[field].length).toBeGreaterThan(0);
+      }
+      expect(w.tags.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('skills has 3 non-empty groups', () => {
+    expect(skills).toHaveLength(3);
+    for (const g of skills) {
+      expect(g.label.length).toBeGreaterThan(0);
+      expect(g.items.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('lessons has a booking email and subject', () => {
+    expect(lessons.bookingEmail).toBe('erichung.94@gmail.com');
+    expect(lessons.bookingSubject.length).toBeGreaterThan(0);
   });
 });
