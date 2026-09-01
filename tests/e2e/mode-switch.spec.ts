@@ -66,4 +66,12 @@ test.describe('mode switch', () => {
     await expect(page.locator('[data-scope="dance"] .hero__tagline')).toHaveText('…dancer by night');
     await expect(page.locator('[data-scope="dance"] .hero__cta a')).toHaveAttribute('href', /^mailto:erichung\.94@gmail\.com/);
   });
+
+  test('contact links differ per mode', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('[data-scope="dev"] #dev-contact')).toContainText('GitHub');
+    await expect(page.locator('[data-scope="dev"] #dev-contact')).toContainText('LinkedIn');
+    await page.goto('/dancer');
+    await expect(page.locator('[data-scope="dance"] #dance-contact')).not.toContainText('GitHub');
+  });
 });
