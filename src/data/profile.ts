@@ -15,6 +15,7 @@ export const profile = {
     github: 'https://github.com/erichung94',
     linkedin: 'https://www.linkedin.com/in/erichung-tech',
     instagram: '', // Eric to supply; Contact section hides the link while empty
+    repo: 'https://github.com/erichung94/Eric-Portfolio',
   },
   // One photo per mode. An empty value still reserves the hero slot and draws a
   // neutral box, so the mirrored layout stays reviewable; the About section for

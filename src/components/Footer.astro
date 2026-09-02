@@ -1,13 +1,21 @@
 ---
+import { profile } from '../data/profile';
 ---
 <footer class="site-footer container">
   <p>© {new Date().getFullYear()} Eric Hung</p>
-  <p>Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> · <a href="https://github.com/erichung94/erichung-portfolio" target="_blank" rel="noopener">Source</a></p>
+  <p>
+    <a href={`mailto:${profile.links.email}`}>{profile.links.email}</a>
+    <span aria-hidden="true"> · </span>
+    <a href={profile.links.repo} target="_blank" rel="noopener">Source</a>
+  </p>
 </footer>
 <style>
+  /* Mono and token-sized, so the footer sits in the same metadata system as the
+     eyebrows, work meta and tags rather than being its own one-off size. */
   .site-footer {
     margin-top: 80px; padding-block: 32px; border-top: 1px solid var(--rule);
     display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
-    font-size: 12px; color: var(--fg-muted);
+    font-family: var(--font-util); font-size: var(--step-label);
+    letter-spacing: 0.04em; color: var(--fg-muted);
   }
 </style>
