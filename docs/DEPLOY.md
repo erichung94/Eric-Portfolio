@@ -5,12 +5,10 @@ The site is a static Astro build: `npm run build` → publish `dist/`.
 
 ## One-time setup
 
-### 0. Push the repo to GitHub (if not already)
+### 0. Push the repo to GitHub
 
-```bash
-cd "C:\Users\Nobody\Desktop\Coding\Eric-Portfolio"
-gh repo create Eric-Portfolio --public --source . --remote origin --push
-```
+Done. Public at https://github.com/erichung94/Eric-Portfolio, `main` tracked.
+Netlify builds whatever is on `main`, so push before expecting a deploy.
 
 ### 1. Connect to Netlify
 
@@ -22,8 +20,7 @@ gh repo create Eric-Portfolio --public --source . --remote origin --push
    - `/anything-else` shows the styled 404 page
    - the "Résumé" button downloads the PDF
 
-> **Do NOT connect the custom domain yet.** Hold here until the placeholder
-> content is replaced (see "Before the DNS cutover" below).
+> The content hold that used to sit here is lifted. See "Content status" below.
 
 ### 2. Add the custom domain (only after content is real)
 
@@ -66,28 +63,37 @@ Then run Lighthouse on the live URL (spec §14): Performance ≥ 95, Accessibili
 Push to `main` → Netlify rebuilds and publishes automatically. Pull requests get
 their own preview URL.
 
-## Before the DNS cutover — content that must be real first
+## Content status
 
-The site is code-complete but ships with placeholders. Replace these before
-pointing `erichung.dev` at it:
+The dev side is finished and is what the launch is for. The dance side is
+deliberately a holding page: a hero, a "Coming soon" panel, and contact. It
+carries `noindex` so it does not rank for Eric's name while it is a stub.
 
-- `src/components/AboutDev.astro` — real bio (currently Lorem ipsum)
-- `src/components/AboutDance.astro` — real dance bio (currently Lorem ipsum)
-- **`src/data/profile.ts` `photos.dance`** — currently points at the DEV headshot
-  as a placeholder so the mirrored dance layout can be seen. It is not a dance
-  photo and the alt text says "Eric Hung dancing", so this must be swapped for a
-  real one before the domain goes live. While replacing it, decide whether to
-  keep the `.hero--dance .hero__shot` `scaleX(-1)` mirror in `global.css`; it
-  makes the subject face into the copy, but it will reverse a recognisable
-  lead/follow position.
-- `public/images/og-dev.png`, `public/images/og-dance.png` — real 1200×630 social
-  cards (currently solid-colour blanks; a blank card is worse than none on
-  LinkedIn). If real images will take a while, temporarily remove the
-  `og:image` / `twitter:card` lines in `src/layouts/SiteShell.astro`.
-- `src/data/lessons.ts` — real `blurb` and `rates`
-- `src/data/videos.ts` — 2–3 real embed URLs + gallery images (then also add the
-  `Watch` video/gallery e2e coverage and the deferred `referrerpolicy` test)
-- `src/data/profile.ts` — set `links.instagram` (Contact hides it while empty)
+Ready:
+
+- `AboutDev.astro` - real copy, written by Eric
+- `og-dev.png` / `og-dance.png` - real 1200x630 cards, day and night
+- `profile.ts` - `links.instagram` set, `links.repo` resolves
+- `photos.dance` - empty, so no stand-in is presented as a dance photo
+
+Not blocking launch, wanted before the dance side is promoted:
+
+- a real dance photo, plus a decision on the `scaleX(-1)` mirror in
+  `global.css`, which will reverse a recognisable lead/follow position
+- `lessons.ts` blurb and rates, `videos.ts` embeds and gallery
+- restoring `Lessons`, `Watch` and `AboutDance` in `DanceSections.astro`;
+  they are still in the tree, unused
+- dropping the `noindex` in `SiteShell.astro` once there is something there
+
+## Notes specific to this domain
+
+- **`.dev` is on the HSTS preload list.** Browsers refuse plain HTTP for it, with
+  no click-through. The site is unreachable until Netlify's certificate is
+  issued, which is normal and not a misconfiguration. Do not judge the cutover
+  until HTTPS is live.
+- **GoDaddy domain forwarding overrides DNS records.** If forwarding or parking
+  is on, the A and CNAME records are ignored and the domain keeps showing the
+  parked page. Turn that off before debugging anything else.
 
 ## Record of the actual deploy
 
