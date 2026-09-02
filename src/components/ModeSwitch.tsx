@@ -9,9 +9,10 @@ function applyMode(next: Mode, animate: boolean) {
   if (root.dataset.mode === next) return;
   if (animate) {
     root.classList.add('theme-transition');
-    // Must outlast the 750ms transition in tokens.css, or the class is removed
-    // mid-fade and the remaining colour change snaps.
-    window.setTimeout(() => root.classList.remove('theme-transition'), 850);
+    // Must outlast the longest --theme-fade in tokens.css (0.9s dimming into
+    // night), or the class is removed mid-fade and the rest of the colour
+    // change snaps.
+    window.setTimeout(() => root.classList.remove('theme-transition'), 1000);
   }
   root.dataset.mode = next;
   window.scrollTo({ top: 0, behavior: 'auto' });

@@ -1,19 +1,19 @@
 /*
- * Design direction: "Publication / Schematic" hybrid (A + B).
+ * Design direction: "Colour Temperature" (D2).
  *
- * From A: a full-bleed deep navy masthead the mode switch lives inside, a
- * warmed near-white ground so the warm-toned headshot does not read as pasted
- * on, and Fraunces carrying the display type.
- * From B: JetBrains Mono on labels and metadata but never on running text, and
- * work entries as bordered cards.
+ * Day and night differ by the temperature of the light, not by lightness.
+ * Daylight ambient is cool, roughly 5600K. Stage and tungsten light is warm,
+ * roughly 3200K. So the accent flips: cool sky blue by day, warm amber by
+ * night. Darkness itself is cold, which is why night's ground is a blue-black
+ * and never a neutral one.
  *
- * The pairing is the point: a serif display gives the page personality that
- * belongs to both halves of the site, while the mono metadata signals engineer
- * on the dev side without making the dance side feel like a terminal.
+ * The light source also moves. By day it is overhead, so the masthead sky
+ * carries a warm sun and the content below sits in flat, even ambient light.
+ * By night the sky is cold and empty and the warm light comes from inside the
+ * page, pooling around the content the way a stage lamp or a street light does.
  *
- * Swapping directions later means replacing the two colour blocks and the three
- * --font-* tokens below, plus the Google Fonts link in SiteShell.astro.
- * Nothing else references a literal colour or family.
+ * The through-line between modes is the structure, not the hue: same masthead,
+ * same switch, same mirrored hero, same type system.
  *
  * ---------------------------------------------------------------------------
  * WCAG 2.1 AA contrast evidence. Ratios use the standard formula:
@@ -21,59 +21,61 @@
  *   ratio = (Llighter + 0.05) / (Ldarker + 0.05)
  * Thresholds: >= 4.5:1 normal text, >= 3.0:1 large text / non-text UI.
  *
- * LIGHT / dev  (page ground --bg #FCFCFA, masthead ground --field #0E2A4A)
- *   --fg            #131A24 on #FCFCFA ........ 15.72:1  PASS
- *   --fg-muted      #55606F on #FCFCFA .........  6.74:1  PASS
- *   --accent-strong #14477E on #FCFCFA .........  8.23:1  PASS  [links, mono meta, eyebrow]
- *   --accent        #1B4F8A as a fill; --accent-on #FFFFFF on it ..  7.31:1  PASS
- *   --on-field      #F4F7FB on #0E2A4A ........ 13.44:1  PASS  [switch]
- *   --on-field-mute #A9B8CA (68% of --on-field over --field) ..  6.18:1  PASS  [mono nav]
+ * DAY / dev  (ground --bg #F8FAFC, masthead --field #0C2743)
+ *   --fg            #0E141C on #F8FAFC ........ 17.12:1  PASS
+ *   --fg-muted      #55606E on #F8FAFC .........  6.61:1  PASS
+ *   --accent-strong #12518F on #F8FAFC .........  7.58:1  PASS  [links, eyebrow, meta]
+ *   --accent        #1B5FA8 as a fill; --accent-on #FFFFFF on it ..  6.29:1  PASS
+ *   --on-field      #F4F7FB on #0C2743 ........ 14.02:1  PASS
+ *   --on-field-mute #A9B8CA (68% of --on-field over --field) ..  6.44:1  PASS
+ *   Lightest point of the day sky, warm horizon over #1A4A73, is ~#3A6188;
+ *   --on-field on that is 6.51:1  PASS
  *
- * DARK / dance  (page ground --bg #0C1420, masthead ground --field #070E18)
- *   --fg            #EEF1F6 on #0C1420 ........ 15.09:1  PASS
- *   --fg-muted      #9AA6B8 on #0C1420 .........  7.06:1  PASS
- *   --accent-strong #90B4E8 on #0C1420 .........  8.44:1  PASS
- *   --accent        #7FA9E0 as a fill; --accent-on #0A1119 on it ..  8.91:1  PASS
- *   --on-field      #EEF1F6 on #070E18 ........ 16.61:1  PASS
- *   --on-field-mute #9FA9B8 (66% of --on-field over --field) ..  6.62:1  PASS
+ * NIGHT / dance  (ground --bg #080B12, masthead --field #05070E)
+ *   --fg            #F2EEE8 on #080B12 ........ 17.43:1  PASS
+ *   --fg-muted      #8E8880 on #080B12 .........  5.62:1  PASS
+ *   --accent-strong #E9B876 on #080B12 ........ 10.48:1  PASS
+ *   --accent        #E0A458 as a fill; --accent-on #1A1206 on it ..  8.31:1  PASS
+ *   --on-field      #E8ECF2 on #05070E ........ 17.96:1  PASS
+ *   --on-field-mute #9FA6B0 (66% of --on-field over --field) ..  6.71:1  PASS
  *
  * The inactive mode-switch label is de-emphasised by opacity in global.css;
- * at 0.62 over --field it clears AA in both modes (light 7.4:1, dark 8.9:1).
+ * at 0.62 over --field it clears AA in both modes (day 7.6:1, night 9.4:1).
  * ---------------------------------------------------------------------------
  */
 
 :root {
   color-scheme: light;
 
-  /* Ground and ink */
-  --bg: #FCFCFA;
-  --fg: #131A24;
-  --fg-muted: #55606F;
-  --rule: rgba(19, 26, 36, 0.13);
-  --rule-soft: rgba(19, 26, 36, 0.05);
+  /* DAY. Cool ambient: a daylight white with a blue bias, not a warm paper. */
+  --bg: #F8FAFC;
+  --fg: #0E141C;
+  --fg-muted: #55606E;
+  --rule: rgba(14, 20, 28, 0.13);
+  --rule-soft: rgba(14, 20, 28, 0.05);
   --surface: #FFFFFF;
 
-  /* Blue: --accent is a fill, --accent-strong is the text-safe value */
-  --accent: #1B4F8A;
-  --accent-strong: #14477E;
+  /* The accent is the sky: cool, ~5600K */
+  --accent: #1B5FA8;
+  --accent-strong: #12518F;
   --accent-on: #FFFFFF;
 
-  /* The masthead band. --field is the solid base colour underneath the sky.
-     Both skies are defined here, unscoped, because the header stacks them and
-     crossfades their opacity: gradients cannot be interpolated by a CSS
-     transition, so fading two static layers is the only way to animate a sky. */
-  --field: #0E2A4A;
+  --field: #0C2743;
   --on-field: #F4F7FB;
   --on-field-muted: rgba(244, 247, 251, 0.68);
 
-  /* Day: deep blue overhead falling to a warm low sun at the bottom right,
-     which meets the hero's sunlight and reads as one continuous light source. */
-  --sky-day:
-    radial-gradient(115% 78% at 80% 122%, rgba(255, 198, 132, 0.24), transparent 60%),
-    linear-gradient(180deg, #0A2340 0%, #14395F 100%);
+  /* Both skies and the light pool are declared unscoped, because a CSS
+     transition cannot interpolate a gradient. The header stacks the two skies
+     and the hero stacks the pool, and the mode crossfades their opacity. */
 
-  /* Night: near-black overhead into indigo, with a thin scatter of dim stars.
-     Small and low-alpha on purpose; this should read as texture, not decoration. */
+  /* Day sky: blue overhead, warm sun low at the right. The light is up there,
+     which is why the content below gets none of its own. */
+  --sky-day:
+    radial-gradient(115% 80% at 82% 124%, rgba(255, 196, 128, 0.30), transparent 60%),
+    linear-gradient(180deg, #081F36 0%, #1A4A73 100%);
+
+  /* Night sky: cold, empty, starlit. No warm glow up here; at night the warm
+     light comes from below, not from the sky. */
   --sky-night:
     radial-gradient(1.6px 1.6px at 11% 34%, rgba(255, 255, 255, 0.50), transparent),
     radial-gradient(1.2px 1.2px at 23% 17%, rgba(255, 255, 255, 0.34), transparent),
@@ -83,65 +85,90 @@
     radial-gradient(1.2px 1.2px at 74% 15%, rgba(255, 255, 255, 0.44), transparent),
     radial-gradient(1px 1px at 86% 41%, rgba(255, 255, 255, 0.26), transparent),
     radial-gradient(1.4px 1.4px at 94% 26%, rgba(255, 255, 255, 0.36), transparent),
-    linear-gradient(180deg, #04070D 0%, #0C1728 100%);
+    linear-gradient(180deg, #02040A 0%, #0A1020 100%);
 
-  /* Day: warm sun falling from the top right, away from the text column. */
-  --hero-light: radial-gradient(58% 68% at 88% 4%, rgba(255, 206, 138, 0.22), transparent 68%);
+  /* The warm pool of stage light. Present in the markup always, faded to zero
+     by day: even ambient light is expressed as the absence of a pool. */
+  --pool: radial-gradient(46% 60% at 18% 46%, rgba(224, 164, 88, 0.20), transparent 68%);
+  --pool-opacity: 0;
 
-  /* Type */
+  /* Type. Dark-on-light needs no optical compensation. */
+  --weight-body: 400;
+  --weight-display: 400;
+  --track-body: 0em;
+
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-body: "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-util: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --step-label: 0.6875rem;  /* 11px  mono eyebrows, meta, nav, tags */
-  --step--1: 0.8125rem;     /* 13px  fine print */
-  --step-0: 1.0625rem;      /* 17px  body */
-  --step-1: 1.25rem;        /* 20px  lead-in */
-  --step-2: 1.875rem;       /* 30px  work titles */
-  --step-3: 2.75rem;        /* 44px  section headings */
-  --display: clamp(3rem, 8vw, 5.5rem); /* 48 -> 88px  the name */
+  --step-label: 0.6875rem;
+  --step--1: 0.8125rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.25rem;
+  --step-2: 1.875rem;
+  --step-3: 2.75rem;
+  --display: clamp(3rem, 8vw, 5.5rem);
 
-  /* Rhythm: two values, not one, so sections and cards group differently */
   --space-section: clamp(64px, 9vw, 116px);
   --space-item: clamp(20px, 2.4vw, 30px);
 
   --container-max: 1100px;
   --container-pad: clamp(20px, 5vw, 48px);
+
+  /* Opening into day is quicker than dimming into night */
+  --theme-fade: 0.5s;
 }
 
 :root[data-mode='dance'] {
   color-scheme: dark;
 
-  --bg: #0C1420;
-  --fg: #EEF1F6;
-  --fg-muted: #9AA6B8;
-  --rule: rgba(238, 241, 246, 0.14);
-  --rule-soft: rgba(238, 241, 246, 0.06);
-  --surface: #131C2B;
+  /* NIGHT. Darkness is cold; the light in it is warm. Muted greys are warm and
+     desaturated, which is what low-light vision actually does to colour. */
+  --bg: #080B12;
+  --fg: #F2EEE8;
+  --fg-muted: #8E8880;
+  --rule: rgba(242, 238, 232, 0.13);
+  --rule-soft: rgba(242, 238, 232, 0.05);
+  --surface: #10141C;
 
-  --accent: #7FA9E0;
-  --accent-strong: #90B4E8;
-  --accent-on: #0A1119;
+  /* The accent is the lamp: warm, ~3200K */
+  --accent: #E0A458;
+  --accent-strong: #E9B876;
+  --accent-on: #1A1206;
 
-  --field: #070E18;
-  --on-field: #EEF1F6;
-  --on-field-muted: rgba(238, 241, 246, 0.66);
+  --field: #05070E;
+  --on-field: #E8ECF2;
+  --on-field-muted: rgba(232, 236, 242, 0.66);
 
-  /* Night: a cool pool of stage light over the photo column, not the text. */
-  --hero-light: radial-gradient(48% 62% at 18% 44%, rgba(150, 186, 236, 0.16), transparent 70%);
+  /* The pool comes up at night: warm, directional, hard falloff, over the photo */
+  --pool-opacity: 1;
+
+  /* Light text on a dark ground blooms optically and reads heavier than the
+     same weight on white, so night drops a step and opens up the tracking. */
+  --weight-body: 350;
+  --weight-display: 300;
+  --track-body: 0.008em;
+
+  /* Dimming into night takes longer than opening into day */
+  --theme-fade: 0.9s;
 }
 
-/* Theme transition. Only active while the .theme-transition class is on <html>,
-   which ModeSwitch adds for the duration of a mode change and then removes, so
-   the universal selector is never live during normal scrolling or interaction.
-   Broad on purpose: at this length a partial fade, where the body eases but the
-   cards and chips snap, is far more obvious than no fade at all. */
+/* Theme transition. Only live while .theme-transition is on <html>, which
+   ModeSwitch adds for the duration of a mode change and then removes, so the
+   universal selector never applies during normal scrolling or interaction.
+   Broad on purpose: a partial fade, where the body eases but the cards and
+   chips snap, is more obvious at this length than no fade at all.
+   The duration comes from --theme-fade, which differs per mode, so the page
+   dims slowly into night and opens faster into day. */
 html.theme-transition,
 html.theme-transition *,
 html.theme-transition *::before,
 html.theme-transition *::after {
-  transition: background-color 0.75s ease, color 0.75s ease,
-              border-color 0.75s ease, opacity 0.75s ease;
+  transition:
+    background-color var(--theme-fade) ease,
+    color var(--theme-fade) ease,
+    border-color var(--theme-fade) ease,
+    opacity var(--theme-fade) ease;
 }
 
 @media (prefers-reduced-motion: reduce) {

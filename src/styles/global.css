@@ -6,6 +6,8 @@ body {
   color: var(--fg);
   font-family: var(--font-body);
   font-size: var(--step-0);
+  font-weight: var(--weight-body);
+  letter-spacing: var(--track-body);
   line-height: 1.6;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -40,10 +42,10 @@ h1, h2, h3 { text-wrap: balance; }
 :root[data-mode='dance'] [data-scope='dev'] { display: none; }
 
 /* ===========================================================================
-   MASTHEAD  (from A)
-   A full-bleed deep navy band the mode switch lives inside. Large on landing,
-   shrinks to a compact bar once you scroll. Everything inside the band draws
-   from --on-field, never --fg.
+   MASTHEAD
+   A full-bleed sky the mode switch lives inside: blue with a low warm sun by
+   day, cold and starlit by night. Large on landing, shrinks to a compact bar
+   once you scroll. Everything inside it draws from --on-field, never --fg.
    =========================================================================== */
 .site-header {
   position: sticky; top: 0; z-index: 50;
@@ -58,7 +60,7 @@ h1, h2, h3 { text-wrap: balance; }
 .site-header::before,
 .site-header::after {
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  transition: opacity 0.75s ease;
+  transition: opacity var(--theme-fade) ease;
 }
 .site-header::before { background: var(--sky-day); opacity: 1; }
 .site-header::after { background: var(--sky-night); opacity: 0; }
@@ -121,9 +123,11 @@ h1, h2, h3 { text-wrap: balance; }
 /* ===========================================================================
    HERO
    =========================================================================== */
-/* The light source is the day/night cue: warm sun from the top right in dev,
-   a cool pool of stage light over the photo column in dance. Both are placed
-   away from the text column so they never sit under running copy. */
+/* Light quality is the day/night cue. By day the sun is up in the masthead and
+   the content sits in flat even ambient light, so there is no pool at all. By
+   night a warm lamp pools over the photo column and falls off hard. The pool
+   element is always present and crossfaded by opacity, because a gradient
+   cannot be transitioned; it sits away from the text so no copy loses contrast. */
 .hero {
   position: relative;
   display: grid; grid-template-columns: 1fr 230px;
@@ -135,7 +139,8 @@ h1, h2, h3 { text-wrap: balance; }
    creating a scroll container, so no sideways scrollbar on narrow screens. */
 .hero::before {
   content: ""; position: absolute; inset: -14% -22% -18%;
-  background: var(--hero-light); pointer-events: none; z-index: -1;
+  background: var(--pool); opacity: var(--pool-opacity);
+  pointer-events: none; z-index: -1;
 }
 .hero--dance { grid-template-columns: 230px 1fr; }
 .hero--dance .hero__text { text-align: right; order: 2; }
@@ -159,7 +164,7 @@ h1, h2, h3 { text-wrap: balance; }
   font-weight: 500; color: var(--accent-strong); margin-bottom: 16px;
 }
 .hero__name {
-  font-family: var(--font-display); font-weight: 400;
+  font-family: var(--font-display); font-weight: var(--weight-display);
   font-size: var(--display); line-height: 0.98; letter-spacing: -0.025em;
   font-variation-settings: "opsz" 120;
 }
@@ -200,7 +205,7 @@ h1, h2, h3 { text-wrap: balance; }
 .section { padding-top: var(--space-section); }
 .section__title {
   position: relative;
-  font-family: var(--font-display); font-weight: 400;
+  font-family: var(--font-display); font-weight: var(--weight-display);
   font-size: var(--step-3); line-height: 1.05; letter-spacing: -0.02em;
   color: var(--fg); margin-bottom: clamp(24px, 3vw, 38px);
   padding-bottom: 16px; border-bottom: 1px solid var(--rule);
