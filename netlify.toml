@@ -1,5 +1,10 @@
 [build]
-  command = "npm run build"
+  # Type check before building. Astro will happily build a site whose types are
+  # broken, and Netlify will publish it, so without this a type error reaches
+  # the live site. Costs a few seconds. The unit and e2e suites run in GitHub
+  # Actions instead: they need a browser download, which does not belong in the
+  # deploy path.
+  command = "npm run check && npm run build"
   publish = "dist"
 
 [build.environment]
