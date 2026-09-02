@@ -97,12 +97,32 @@ Not blocking launch, wanted before the dance side is promoted:
 
 ## Record of the actual deploy
 
-(fill in once done)
+Live at **https://erichung.dev** since 2026-09-02.
 
-- Netlify site name: __________
-- First preview deploy: __________
-- Custom domain connected: __________
-- GoDaddy A record: `@` → __________
-- GoDaddy CNAME: `www` → __________.netlify.app
-- HTTPS provisioned: __________
-- DNS cutover / go-live: __________
+- Netlify site: `stellar-daffodil-5aa950` (`stellar-daffodil-5aa950.netlify.app`)
+- Primary domain: `erichung.dev`; `www` added as an alias and auto-redirects
+- GoDaddy A record: `@` -> `75.2.60.5`, replacing the Website Builder record
+- GoDaddy CNAME: `www` -> `stellar-daffodil-5aa950.netlify.app`, replacing `erichung.dev.`
+- Nameservers unchanged: `ns43` / `ns44.domaincontrol.com`
+- Certificate: Let's Encrypt, issued 2026-09-02, SANs `erichung.dev` and
+  `www.erichung.dev`, renews automatically
+
+Verified on the live domain:
+
+- `/`, `/dancer`, `/robots.txt`, `/sitemap-index.xml`, the resume PDF and both OG
+  images all 200; an unknown path 404s to the styled page
+- `https://www.erichung.dev/` 301s to `https://erichung.dev/`
+- All three `netlify.toml` headers present, plus Netlify's HSTS
+- axe: 0 violations on both routes
+- 366ms load and 191KB transferred on `/`; 165ms and 24KB on `/dancer`
+
+### Gotchas hit on the way
+
+- **Netlify site protection was on by default.** Every route returned 401 and
+  redirected to `app.netlify.com/edge-access`. Set visitor access to public
+  under Access & security. Worth checking first if a fresh site looks broken.
+- **The apex A record was owned by a GoDaddy Website Builder site**, not a plain
+  parked IP, so it had to be replaced rather than just edited around.
+- **`/dancer` used to 301 to `/dancer/`** while the canonical and sitemap both
+  declared `/dancer`. Fixed with `build: { format: 'file' }` in `astro.config.mjs`
+  before the cutover.
