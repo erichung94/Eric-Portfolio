@@ -10,7 +10,7 @@ const { scope } = Astro.props;
 const copy = scope === 'dev' ? profile.dev : profile.dance;
 const photo = profile.photos[scope];
 ---
-<section class={`hero container hero--${scope}${photo ? '' : ' hero--noshot'}`}>
+<section class={`hero container hero--${scope}`}>
   <div class="hero__text">
     <p class="hero__eyebrow">{copy.eyebrow}</p>
     <h1 class="hero__name">{profile.name.first} <em>{profile.name.last}</em></h1>
@@ -26,8 +26,10 @@ const photo = profile.photos[scope];
       )}
     </p>
   </div>
-  {photo && (
+  {photo ? (
     <img class="hero__shot" src={photo} width="230" height="288"
          alt={scope === 'dev' ? 'Eric Hung' : 'Eric Hung dancing'} />
+  ) : (
+    <div class="hero__shot hero__shot--empty" aria-hidden="true"></div>
   )}
 </section>

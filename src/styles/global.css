@@ -50,7 +50,7 @@ h1, h2, h3 { text-wrap: balance; }
 .site-header {
   position: sticky; top: 0; z-index: 50;
   background-color: var(--field);
-  border-bottom: 1px solid rgba(244, 247, 251, 0.10);
+  border-bottom: 1px solid var(--field-edge);
   --switch-scale: 2.4;
   --nav-scale: 1.5;
 }
@@ -90,7 +90,7 @@ h1, h2, h3 { text-wrap: balance; }
   font-family: var(--font-display);
   font-size: calc(17px * var(--switch-scale, 1));
   letter-spacing: -0.005em; color: var(--on-field);
-  padding: 0.1em 1em; line-height: 1.1; opacity: 0.62; font-weight: 400;
+  padding: 0.1em 1em; line-height: 1.1; opacity: var(--switch-dim); font-weight: 400;
   flex: 0 0 auto; min-width: 6.6em; white-space: nowrap;
   transition: font-size 0.28s ease, opacity 0.2s ease;
 }
@@ -151,11 +151,6 @@ h1, h2, h3 { text-wrap: balance; }
    the page. Remove the transform if the real dance photo reads wrong reversed,
    which is likely if it shows a recognisable lead/follow position. */
 .hero--dance .hero__shot { order: 1; transform: scaleX(-1); }
-/* No photo for this mode yet: drop the column so there is no empty grey box.
-   The dance hero only mirrors right when there is an image to mirror against. */
-.hero--noshot, .hero--dance.hero--noshot { grid-template-columns: 1fr; }
-.hero--dance.hero--noshot .hero__text { text-align: left; }
-.hero--dance.hero--noshot .hero__cta { justify-content: flex-start; }
 
 /* Mono eyebrow (from B) over a serif name (from A) */
 .hero__eyebrow {
@@ -183,6 +178,10 @@ h1, h2, h3 { text-wrap: balance; }
   border-radius: 3px; object-fit: cover; object-position: 50% 50%;
   background: var(--rule); border: 1px solid var(--rule);
 }
+/* Slot reserved but not yet filled. Deliberately inert: no icon, no "photo
+   here" label, so it reads as a gap in the content rather than a component,
+   and nobody mistakes a stand-in for the real image. */
+.hero__shot--empty { background: var(--rule-soft); }
 
 .btn {
   display: inline-block; font-family: var(--font-util);

@@ -16,15 +16,15 @@ export const profile = {
     linkedin: 'https://www.linkedin.com/in/erichung-tech',
     instagram: '', // Eric to supply; Contact section hides the link while empty
   },
-  // One photo per mode. Leave a value empty and that mode's hero/about simply
-  // renders without an image rather than showing a placeholder box.
+  // One photo per mode. An empty value still reserves the hero slot and draws a
+  // neutral box, so the mirrored layout stays reviewable; the About section for
+  // that mode simply renders without an image.
   photos: {
     dev: '/images/headshot-dev.jpg',
-    // PLACEHOLDER: the dev headshot standing in so the mirrored dance layout can
-    // be seen. Replace with a real dance photo before launch (see docs/DEPLOY.md)
-    // and drop the .hero--dance .hero__shot mirror rule in global.css if the new
-    // photo should not be flipped.
-    dance: '/images/headshot-dev.jpg',
+    // Empty until Eric has a real dance photo. The hero still reserves the slot
+    // and draws a neutral box, so the mirrored layout stays reviewable without
+    // anyone mistaking a stand-in photo for the real thing.
+    dance: '',
   },
   resume: '/EricHung_Resume.pdf',
 } as const;

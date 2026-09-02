@@ -7,10 +7,15 @@
  * night. Darkness itself is cold, which is why night's ground is a blue-black
  * and never a neutral one.
  *
- * The light source also moves. By day it is overhead, so the masthead sky
- * carries a warm sun and the content below sits in flat, even ambient light.
- * By night the sky is cold and empty and the warm light comes from inside the
- * page, pooling around the content the way a stage lamp or a street light does.
+ * The masthead is a real sky, and its value inverts: bright pale blue with dark
+ * ink on it by day, near-black and starlit with light ink by night. A dark navy
+ * band reads as a header or as dusk, never as daytime, so the day/night flip has
+ * to happen at the top of the page where every visitor sees it first.
+ *
+ * The light source also moves. By day it is overhead in the sky, and the content
+ * below sits in flat even ambient light with no pool of its own. By night the sky
+ * is cold and empty and the warm light comes from inside the page, pooling around
+ * the content the way a stage lamp or a street light does.
  *
  * The through-line between modes is the structure, not the hue: same masthead,
  * same switch, same mirrored hero, same type system.
@@ -21,15 +26,16 @@
  *   ratio = (Llighter + 0.05) / (Ldarker + 0.05)
  * Thresholds: >= 4.5:1 normal text, >= 3.0:1 large text / non-text UI.
  *
- * DAY / dev  (ground --bg #F8FAFC, masthead --field #0C2743)
+ * DAY / dev  (ground --bg #F8FAFC; masthead is the --sky-day gradient, whose
+ * darkest point is #6FA8DC at the top and lightest #EFE0C8 at the horizon, so
+ * every value on the band is checked against both ends)
  *   --fg            #0E141C on #F8FAFC ........ 17.12:1  PASS
  *   --fg-muted      #55606E on #F8FAFC .........  6.61:1  PASS
  *   --accent-strong #12518F on #F8FAFC .........  7.58:1  PASS  [links, eyebrow, meta]
  *   --accent        #1B5FA8 as a fill; --accent-on #FFFFFF on it ..  6.29:1  PASS
- *   --on-field      #F4F7FB on #0C2743 ........ 14.02:1  PASS
- *   --on-field-mute #A9B8CA (68% of --on-field over --field) ..  6.44:1  PASS
- *   Lightest point of the day sky, warm horizon over #1A4A73, is ~#3A6188;
- *   --on-field on that is 6.51:1  PASS
+ *   --on-field      #0B1B2A on #6FA8DC (darkest sky) ..  6.89:1  PASS
+ *   --on-field      #0B1B2A on #EFE0C8 (lightest sky) .. 13.41:1  PASS
+ *   --on-field-mute #2E4254 (78% of --on-field over the mid sky) ..  6.14:1  PASS
  *
  * NIGHT / dance  (ground --bg #080B12, masthead --field #05070E)
  *   --fg            #F2EEE8 on #080B12 ........ 17.43:1  PASS
@@ -39,8 +45,10 @@
  *   --on-field      #E8ECF2 on #05070E ........ 17.96:1  PASS
  *   --on-field-mute #9FA6B0 (66% of --on-field over --field) ..  6.71:1  PASS
  *
- * The inactive mode-switch label is de-emphasised by opacity in global.css;
- * at 0.62 over --field it clears AA in both modes (day 7.6:1, night 9.4:1).
+ * The inactive mode-switch label is de-emphasised by --switch-dim in
+ * global.css. Dark ink on a light sky needs less dimming than light ink on a
+ * dark one to clear AA, so the value differs per mode: 0.74 by day, blending to
+ * #344A5C over the mid sky at 5.58:1 PASS; 0.62 by night at 9.4:1 PASS.
  * ---------------------------------------------------------------------------
  */
 
@@ -60,19 +68,21 @@
   --accent-strong: #12518F;
   --accent-on: #FFFFFF;
 
-  --field: #0C2743;
-  --on-field: #F4F7FB;
-  --on-field-muted: rgba(244, 247, 251, 0.68);
+  --field: #A8CDEA;
+  --on-field: #0B1B2A;
+  --on-field-muted: rgba(11, 27, 42, 0.78);
+  --field-edge: rgba(11, 27, 42, 0.16);
+  --switch-dim: 0.74;
 
   /* Both skies and the light pool are declared unscoped, because a CSS
      transition cannot interpolate a gradient. The header stacks the two skies
      and the hero stacks the pool, and the mode crossfades their opacity. */
 
-  /* Day sky: blue overhead, warm sun low at the right. The light is up there,
-     which is why the content below gets none of its own. */
+  /* Day sky: an actually bright one. Blue overhead, paling toward a warm hazy
+     horizon at the bottom, where it meets the page. A dark navy band reads as a
+     header, or as dusk; only a light sky reads as daytime. */
   --sky-day:
-    radial-gradient(115% 80% at 82% 124%, rgba(255, 196, 128, 0.30), transparent 60%),
-    linear-gradient(180deg, #081F36 0%, #1A4A73 100%);
+    linear-gradient(180deg, #6FA8DC 0%, #A8CDEA 46%, #DCE9F2 82%, #EFE0C8 100%);
 
   /* Night sky: cold, empty, starlit. No warm glow up here; at night the warm
      light comes from below, not from the sky. */
@@ -139,6 +149,8 @@
   --field: #05070E;
   --on-field: #E8ECF2;
   --on-field-muted: rgba(232, 236, 242, 0.66);
+  --field-edge: rgba(232, 236, 242, 0.10);
+  --switch-dim: 0.62;
 
   /* The pool comes up at night: warm, directional, hard falloff, over the photo */
   --pool-opacity: 1;
