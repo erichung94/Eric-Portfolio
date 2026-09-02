@@ -1,6 +1,5 @@
 ---
 import { profile } from '../data/profile';
-import { bookingHref } from '../data/lessons';
 
 interface Props {
   scope: 'dev' | 'dance';
@@ -10,7 +9,7 @@ const { scope } = Astro.props;
 const copy = scope === 'dev' ? profile.dev : profile.dance;
 const photo = profile.photos[scope];
 ---
-<section class={`hero container hero--${scope}`}>
+<section class:list={['hero', 'container', `hero--${scope}`, { 'hero--solo': !photo }]}>
   <div class="hero__text">
     <p class="hero__eyebrow">{copy.eyebrow}</p>
     <h1 class="hero__name">{profile.name.first} <em>{profile.name.last}</em></h1>
@@ -22,14 +21,12 @@ const photo = profile.photos[scope];
           <a class="btn btn--ghost" href={profile.resume} download>Résumé</a>
         </>
       ) : (
-        <a class="btn" href={bookingHref}>Book a lesson</a>
+        <a class="btn" href={profile.links.instagram} target="_blank" rel="noopener">Follow along</a>
       )}
     </p>
   </div>
-  {photo ? (
+  {photo && (
     <img class="hero__shot" src={photo} width="230" height="288"
          alt={scope === 'dev' ? 'Eric Hung' : 'Eric Hung dancing'} />
-  ) : (
-    <div class="hero__shot hero__shot--empty" aria-hidden="true"></div>
   )}
 </section>

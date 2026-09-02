@@ -143,6 +143,9 @@ h1, h2, h3 { text-wrap: balance; }
   pointer-events: none; z-index: -1;
 }
 .hero--dance { grid-template-columns: 230px 1fr; }
+/* No photo for this mode yet. Without a second child the text would otherwise
+   be trapped in the narrow 230px image track, so collapse to one column. */
+.hero--solo, .hero--dance.hero--solo { grid-template-columns: 1fr; }
 .hero--dance .hero__text { text-align: right; order: 2; }
 /* text-align does not reach flex children, so the CTA row needs its own rule */
 .hero--dance .hero__cta { justify-content: flex-end; }
@@ -181,7 +184,6 @@ h1, h2, h3 { text-wrap: balance; }
 /* Slot reserved but not yet filled. Deliberately inert: no icon, no "photo
    here" label, so it reads as a gap in the content rather than a component,
    and nobody mistakes a stand-in for the real image. */
-.hero__shot--empty { background: var(--rule-soft); }
 
 .btn {
   display: inline-block; font-family: var(--font-util);
@@ -258,6 +260,9 @@ h1, h2, h3 { text-wrap: balance; }
 /* `auto` rather than a fixed track, so the column vanishes when a mode has no photo */
 .about { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
 .about p { max-width: 68ch; color: var(--fg-muted); }
+/* About is the one multi-paragraph prose block on the page. Without this the
+   paragraphs butt together and read as a single wall. */
+.about p + p { margin-top: 1em; }
 .about__shot { border-radius: 3px; object-fit: cover; object-position: 50% 14%; border: 1px solid var(--rule); }
 
 /* Watch / Lessons */

@@ -62,7 +62,9 @@ test.describe('mode switch', () => {
 
     await page.goto('/dancer');
     await expect(page.locator('[data-scope="dance"] .hero__tagline')).toHaveText('…Dancer by night');
-    await expect(page.locator('[data-scope="dance"] .hero__cta a')).toHaveAttribute('href', /^mailto:erichung\.94@gmail\.com/);
+    // The dance side is a holding page, so its one CTA points at the only live
+    // dance thing there is. Goes back to a booking mailto when Lessons returns.
+    await expect(page.locator('[data-scope="dance"] .hero__cta a')).toHaveAttribute('href', /instagram\.com/);
   });
 
   test('contact links differ per mode', async ({ page }) => {

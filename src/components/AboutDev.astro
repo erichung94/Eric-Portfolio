@@ -4,9 +4,17 @@ import { profile } from '../data/profile';
 <section id="dev-about" class="container section about">
   <div>
     <h2 class="section__title">About</h2>
-    <p>Placeholder bio. Eric writes this before launch. Lorem ipsum dolor sit amet,
-      consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-      dolore magna aliqua.</p>
+    <p>I build web apps, mostly TypeScript and Node. Most recently I shipped
+      features for two production SaaS platforms: an AI text-messaging product
+      that books appointments out of lead conversations, and an automated
+      payments and commissions platform. The work ran from onboarding flows and
+      Twilio compliance through time-zone-correct scheduling and reconciling
+      payment data across a version migration.</p>
+    <p>Before I wrote software full time, I spent 2020 to 2024 at GoDaddy
+      helping hundreds of businesses get their websites live, and before that I
+      designed escape rooms and ran a 20-person team. Same lesson both times:
+      the build only counts if the person on the other side can actually use it.</p>
+    <p>Based in Minneapolis, open to remote, and looking for my next role.</p>
   </div>
   {profile.photos.dev && (
     <img src={profile.photos.dev} width="180" height="180" alt="Eric Hung" class="about__shot" />

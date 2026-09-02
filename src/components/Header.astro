@@ -10,8 +10,10 @@ const { mode } = Astro.props;
 const devNav = [
   ['#dev-work', 'Work'], ['#dev-skills', 'Skills'], ['#dev-about', 'About'], ['#dev-contact', 'Contact'],
 ];
+// The dance side is a holding page for now, so there is one destination
+// rather than four. Restore the full list when those sections come back.
 const danceNav = [
-  ['#dance-lessons', 'Lessons'], ['#dance-watch', 'Watch'], ['#dance-about', 'About'], ['#dance-contact', 'Contact'],
+  ['#dance-contact', 'Contact'],
 ];
 ---
 <header class="site-header">

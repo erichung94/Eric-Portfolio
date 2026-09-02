@@ -14,13 +14,13 @@ interface Props {
 const { mode } = Astro.props;
 const meta = {
   dev: {
-    title: 'Eric Hung — Full-stack developer',
+    title: 'Eric Hung | Full-stack developer',
     description: 'Full-stack developer in Minneapolis. TypeScript and Node SaaS work, and a few things I have shipped.',
     og: '/images/og-dev.png',
   },
   dance: {
-    title: 'Eric Hung — West Coast Swing instructor',
-    description: 'West Coast Swing dancer and instructor in the Twin Cities. Private lessons for all levels.',
+    title: 'Eric Hung | West Coast Swing instructor',
+    description: 'West Coast Swing dancer and instructor in the Twin Cities. Lessons and video coming soon.',
     og: '/images/og-dance.png',
   },
 }[mode];
@@ -41,6 +41,9 @@ const canonical = new URL(mode === 'dance' ? '/dancer' : '/', Astro.site).href;
     <title>{meta.title}</title>
     <meta name="description" content={meta.description} />
     <link rel="canonical" href={canonical} />
+    {/* The dance route is a holding page. Let it be reachable and shareable,
+        but keep it out of search results until there is something on it. */}
+    {mode === 'dance' && <meta name="robots" content="noindex, follow" />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={meta.title} />
     <meta property="og:description" content={meta.description} />

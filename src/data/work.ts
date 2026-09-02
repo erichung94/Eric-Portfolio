@@ -67,11 +67,11 @@ export const work: CaseStudy[] = [
   },
   {
     slug: 'ericassistant',
-    title: 'EricAssistant — a second-brain workspace',
+    title: 'EricAssistant: a second-brain workspace',
     org: 'Personal',
     year: '2026',
     problem:
-      'Recurring context — background, priorities, preferences, past decisions — had to be re-explained to an AI assistant every session.',
+      'Recurring context (background, priorities, preferences, past decisions) had to be re-explained to an AI assistant every session.',
     build:
       'A Claude Code workspace structured as an executive assistant: context files, an append-only decision log, reusable templates, and a place for skills to accrete as workflows repeat.',
     result: 'The assistant carries context between sessions instead of starting cold.',
