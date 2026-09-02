@@ -12,6 +12,8 @@ type Probe = {
   hAsym: number;
   vOffset: number;
   seamHeight: number;
+  offCentreline: number;
+  boxWidthDiff: number;
 };
 
 async function probeSeam(page: import('@playwright/test').Page): Promise<Probe> {
@@ -44,10 +46,22 @@ async function probeSeam(page: import('@playwright/test').Page): Promise<Probe> 
     const inkCentre =
       (baseline - m.actualBoundingBoxAscent + (baseline + m.actualBoundingBoxDescent)) / 2;
 
+    // The seam is the axis the mirrored layout turns on, so it also has to
+    // agree with the centreline the nav and hero are centred on. Equal gaps
+    // alone do not give you that: with unequal button widths the seam can sit
+    // correctly between the words and still be off the page's centre.
+    // Measure against the header's own box, not a nav. The per-mode navs are
+    // hidden with display:none on an ancestor, so the inactive one still
+    // matches a selector and reports a zero rect.
+    const axis = document.querySelector('.site-header__inner')!.getBoundingClientRect();
+    const boxes = btns.map((b) => b.getBoundingClientRect());
+
     return {
       hAsym: midX - left.right - (right.left - midX),
       vOffset: (seam.top + seam.bottom) / 2 - inkCentre,
       seamHeight: seam.height,
+      offCentreline: midX - (axis.left + axis.right) / 2,
+      boxWidthDiff: boxes[0].width - boxes[1].width,
     };
   });
 }
@@ -62,7 +76,8 @@ for (const [label, width, height] of [
     for (const path of ['/', '/dancer']) {
       await page.goto(path);
       await page.waitForLoadState('networkidle');
-      const { hAsym, vOffset, seamHeight } = await probeSeam(page);
+      const { hAsym, vOffset, seamHeight, offCentreline, boxWidthDiff } =
+        await probeSeam(page);
 
       // Equal gap to the word on each side.
       expect(Math.abs(hAsym), `${path}: horizontal gap differs by ${hAsym.toFixed(2)}px`)
@@ -70,6 +85,16 @@ for (const [label, width, height] of [
       // Centred on the letterforms, not hanging from the baseline.
       expect(Math.abs(vOffset), `${path}: seam sits ${vOffset.toFixed(2)}px off the ink centre`)
         .toBeLessThan(2);
+      // On the same centreline as the nav below it.
+      expect(
+        Math.abs(offCentreline),
+        `${path}: seam is ${offCentreline.toFixed(2)}px off the header centreline`,
+      ).toBeLessThan(1);
+      // Both buttons the same width, which is what puts it there.
+      expect(
+        Math.abs(boxWidthDiff),
+        `${path}: button widths differ by ${boxWidthDiff.toFixed(2)}px`,
+      ).toBeLessThan(1);
       // Scales with the labels rather than staying a fixed pixel height.
       expect(seamHeight).toBeGreaterThan(20);
     }

@@ -55,10 +55,17 @@ export default function ModeSwitch({ current }: { current: Mode }) {
               className="mode-switch__btn"
               aria-pressed={m === mode}
               data-mode-target={m}
-              data-label={LABEL[m]}
               onClick={() => choose(m)}
             >
               {LABEL[m]}
+              {/* Every label, at the selected weight, hidden and zero-height.
+                  It gives each button the width of the widest label, so both
+                  sides of the seam are always the same width. See global.css. */}
+              <span className="mode-switch__ghost" aria-hidden="true">
+                {ORDER.map((other) => (
+                  <span key={other}>{LABEL[other]}</span>
+                ))}
+              </span>
             </button>
           </Fragment>
         ))}

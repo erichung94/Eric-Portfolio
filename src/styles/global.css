@@ -79,17 +79,20 @@ h1, h2, h3 { text-wrap: balance; }
 /* One scaled size drives the labels and the seam together, so the seam keeps
    its proportions when the masthead collapses. */
 .mode-switch { --switch-font: calc(17px * var(--switch-scale, 1)); }
+/* The seam is the axis the whole dev/dance mirror turns on, so it has to agree
+   with the centreline the nav and hero use. Two things have to be true at once:
+   the seam sits on the group's centre, and the gap from the seam to each word
+   is equal. Both follow from the buttons being the same width (see the ghost
+   below) plus equal inner padding. The labels hug the seam and the slack falls
+   to the outer edges, where no edge is drawn, so it does not read as offset.
+   Grid with `1fr auto 1fr` looks like the tidier answer and is not: Chromium
+   does not expand flexible tracks under `width: max-content`, so the columns
+   stay at their own content widths and nothing is equalised. */
 .mode-switch__group { display: flex; align-items: baseline; }
-/* The seam is a flex item between the two buttons rather than absolutely
-   positioned at 50%. The labels are different lengths, so the midpoint of the
-   group is not the gap between them: "Developer" set bold needs 6.65em with its
-   padding, which overran the old min-width and pushed the true boundary right
-   of centre. Sitting in the flow puts the seam on that boundary by
-   construction, at any font size, in any language.
-   align-self overrides the group's baseline alignment so the line centres on
+/* align-self overrides the group's baseline alignment so the line centres on
    the labels instead of hanging from their baseline. */
 .mode-switch__seam {
-  flex: 0 0 1px; align-self: center;
+  width: 1px; align-self: center;
   height: calc(var(--switch-font) * 1.35); pointer-events: none;
   background: linear-gradient(to bottom,
     transparent 0%, var(--on-field) 24%, var(--on-field) 76%, transparent 100%);
@@ -102,18 +105,25 @@ h1, h2, h3 { text-wrap: balance; }
   font-size: var(--switch-font);
   letter-spacing: -0.005em; color: var(--on-field);
   padding: 0.1em 1em; line-height: 1.1; opacity: var(--switch-dim); font-weight: 400;
-  flex: 0 0 auto; white-space: nowrap;
+  white-space: nowrap;
   transition: font-size 0.28s ease, opacity 0.2s ease;
 }
-/* A hidden copy of the label at the active weight. It gives the button the
-   width of its own bold form at all times, so going bold on selection cannot
-   widen the button and shove the seam sideways. Zero height keeps it out of the
-   vertical layout entirely. */
-.mode-switch__btn::after {
-  content: attr(data-label);
+/* A hidden copy of every label, at the selected weight, inside each button.
+   Block children make the button as wide as its widest child, so both buttons
+   settle at the width of the longest label set bold. That does two jobs: the
+   two sides of the seam are equal, which puts the seam on the centreline; and
+   going bold on selection cannot widen a button and shove the seam sideways.
+   Measuring the real strings beats a hand-tuned min-width, which is what broke
+   before: bold "Developer" needs 6.65em and min-width was 6.6em desktop and
+   5.8em mobile, so the boxes silently stopped matching.
+   Zero height with overflow hidden keeps it out of the vertical layout, and
+   visibility: hidden keeps it out of the accessibility tree, so the buttons are
+   still named just "Developer" and "Dancer". */
+.mode-switch__ghost {
   display: block; height: 0; overflow: hidden;
   font-weight: 600; visibility: hidden; pointer-events: none;
 }
+.mode-switch__ghost > span { display: block; }
 /* Hug the divider: each label sits the same distance from the centre seam. */
 .mode-switch__btn[data-mode-target='dev'] { text-align: right; padding-right: 0.85em; }
 .mode-switch__btn[data-mode-target='dance'] { text-align: left; padding-left: 0.85em; }
