@@ -1,5 +1,7 @@
 ---
-import { profile } from '../data/profile';
+// No photo here. About now sits directly under the hero, which already shows
+// the headshot, and repeating it inside one screen reads as a duplicate rather
+// than a second look. Restore the <img> if About ever gets a distinct photo.
 ---
 <section id="dev-about" class="container section about">
   <div>
@@ -21,7 +23,4 @@ import { profile } from '../data/profile';
       comfortable learning whatever a problem needs.</p>
     <p>Based in Minneapolis, open to remote, and looking for my next role.</p>
   </div>
-  {profile.photos.dev && (
-    <img src={profile.photos.dev} width="180" height="180" alt="Eric Hung" class="about__shot" />
-  )}
 </section>
