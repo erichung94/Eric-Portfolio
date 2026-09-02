@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { pathForMode, type Mode } from '../lib/mode';
 
 const ORDER: Mode[] = ['dev', 'dance'];
@@ -47,19 +47,21 @@ export default function ModeSwitch({ current }: { current: Mode }) {
   return (
     <div className="mode-switch" role="group" aria-label="Choose site mode">
       <div className="mode-switch__group">
-        {ORDER.map((m) => (
-          <button
-            key={m}
-            type="button"
-            className="mode-switch__btn"
-            aria-pressed={m === mode}
-            data-mode-target={m}
-            onClick={() => choose(m)}
-          >
-            {LABEL[m]}
-          </button>
+        {ORDER.map((m, i) => (
+          <Fragment key={m}>
+            {i > 0 && <span className="mode-switch__seam" aria-hidden="true" />}
+            <button
+              type="button"
+              className="mode-switch__btn"
+              aria-pressed={m === mode}
+              data-mode-target={m}
+              data-label={LABEL[m]}
+              onClick={() => choose(m)}
+            >
+              {LABEL[m]}
+            </button>
+          </Fragment>
         ))}
-        <span className="mode-switch__seam" aria-hidden="true" />
       </div>
     </div>
   );

@@ -76,23 +76,43 @@ h1, h2, h3 { text-wrap: balance; }
 
 /* Mode switch: Fraunces on the band, no chrome, fading seam */
 .mode-switch { display: flex; justify-content: center; }
-/* Equal-width labels keep the seam on the true centre whichever side is bold;
-   baseline alignment keeps both labels on one baseline. */
-.mode-switch__group { position: relative; display: flex; align-items: baseline; }
+/* One scaled size drives the labels and the seam together, so the seam keeps
+   its proportions when the masthead collapses. */
+.mode-switch { --switch-font: calc(17px * var(--switch-scale, 1)); }
+.mode-switch__group { display: flex; align-items: baseline; }
+/* The seam is a flex item between the two buttons rather than absolutely
+   positioned at 50%. The labels are different lengths, so the midpoint of the
+   group is not the gap between them: "Developer" set bold needs 6.65em with its
+   padding, which overran the old min-width and pushed the true boundary right
+   of centre. Sitting in the flow puts the seam on that boundary by
+   construction, at any font size, in any language.
+   align-self overrides the group's baseline alignment so the line centres on
+   the labels instead of hanging from their baseline. */
 .mode-switch__seam {
-  position: absolute; left: 50%; top: -0.12em; translate: -50% 0;
-  width: 1px; height: 2.4em; pointer-events: none;
-  background: linear-gradient(to bottom, var(--on-field) 0 20%, transparent 100%);
+  flex: 0 0 1px; align-self: center;
+  height: calc(var(--switch-font) * 1.35); pointer-events: none;
+  background: linear-gradient(to bottom,
+    transparent 0%, var(--on-field) 24%, var(--on-field) 76%, transparent 100%);
   opacity: 0.45;
+  transition: height 0.28s ease;
 }
 .mode-switch__btn {
   appearance: none; background: none; border: 0; cursor: pointer;
   font-family: var(--font-display);
-  font-size: calc(17px * var(--switch-scale, 1));
+  font-size: var(--switch-font);
   letter-spacing: -0.005em; color: var(--on-field);
   padding: 0.1em 1em; line-height: 1.1; opacity: var(--switch-dim); font-weight: 400;
-  flex: 0 0 auto; min-width: 6.6em; white-space: nowrap;
+  flex: 0 0 auto; white-space: nowrap;
   transition: font-size 0.28s ease, opacity 0.2s ease;
+}
+/* A hidden copy of the label at the active weight. It gives the button the
+   width of its own bold form at all times, so going bold on selection cannot
+   widen the button and shove the seam sideways. Zero height keeps it out of the
+   vertical layout entirely. */
+.mode-switch__btn::after {
+  content: attr(data-label);
+  display: block; height: 0; overflow: hidden;
+  font-weight: 600; visibility: hidden; pointer-events: none;
 }
 /* Hug the divider: each label sits the same distance from the centre seam. */
 .mode-switch__btn[data-mode-target='dev'] { text-align: right; padding-right: 0.85em; }
@@ -278,7 +298,7 @@ h1, h2, h3 { text-wrap: balance; }
 .contact { list-style: none; display: flex; flex-wrap: wrap; gap: 22px; padding: 0; font-family: var(--font-util); font-size: var(--step--1); }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-header__inner, .mode-switch__btn, .mode-nav, .mode-nav a, .btn, .work__item,
+  .site-header__inner, .mode-switch__btn, .mode-switch__seam, .mode-nav, .mode-nav a, .btn, .work__item,
   .site-header::before, .site-header::after { transition: none; }
 }
 
@@ -286,7 +306,6 @@ h1, h2, h3 { text-wrap: balance; }
   /* Dial the landing size back so the big switch does not overflow small screens */
   .site-header { --switch-scale: 1.3; --nav-scale: 1.1; }
   .site-header.is-scrolled { --switch-scale: 1; --nav-scale: 1; }
-  .mode-switch__btn { min-width: 5.8em; }
   .mode-nav { flex-wrap: wrap; }
   .hero, .hero--dance { grid-template-columns: 1fr; }
   .hero--dance .hero__text { text-align: left; order: 2; }
