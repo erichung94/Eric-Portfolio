@@ -8,5 +8,7 @@ import { profile } from '../data/profile';
       consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
       dolore magna aliqua.</p>
   </div>
-  <img src={profile.headshot} width="180" height="180" alt="Eric Hung" class="about__shot" />
+  {profile.photos.dev && (
+    <img src={profile.photos.dev} width="180" height="180" alt="Eric Hung" class="about__shot" />
+  )}
 </section>

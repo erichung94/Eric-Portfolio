@@ -14,6 +14,11 @@ export const profile = {
     linkedin: 'https://www.linkedin.com/in/erichung-tech',
     instagram: '', // Eric to supply; Contact section hides the link while empty
   },
-  headshot: '/images/headshot.png',
+  // One photo per mode. Leave a value empty and that mode's hero/about simply
+  // renders without an image rather than showing a placeholder box.
+  photos: {
+    dev: '/images/headshot-dev.jpg',
+    dance: '', // Eric to supply
+  },
   resume: '/EricHung_Resume.pdf',
 } as const;

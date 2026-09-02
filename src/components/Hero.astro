@@ -8,8 +8,9 @@ interface Props {
 
 const { scope } = Astro.props;
 const copy = scope === 'dev' ? profile.dev : profile.dance;
+const photo = profile.photos[scope];
 ---
-<section class={`hero container hero--${scope}`}>
+<section class={`hero container hero--${scope}${photo ? '' : ' hero--noshot'}`}>
   <div class="hero__text">
     <p class="hero__eyebrow">{copy.eyebrow}</p>
     <h1 class="hero__name">{profile.name.first} <em>{profile.name.last}</em></h1>
@@ -25,6 +26,8 @@ const copy = scope === 'dev' ? profile.dev : profile.dance;
       )}
     </p>
   </div>
-  <img class="hero__shot" src={profile.headshot} width="230" height="230"
-       alt={scope === 'dev' ? 'Eric Hung' : 'Eric Hung dancing'} />
+  {photo && (
+    <img class="hero__shot" src={photo} width="230" height="288"
+         alt={scope === 'dev' ? 'Eric Hung' : 'Eric Hung dancing'} />
+  )}
 </section>

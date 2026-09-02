@@ -7,5 +7,7 @@ import { profile } from '../data/profile';
     <p>Placeholder dance bio. Eric writes this before launch. Lorem ipsum dolor sit
       amet, consectetur adipiscing elit.</p>
   </div>
-  <img src={profile.headshot} width="180" height="180" alt="Eric Hung dancing" class="about__shot" />
+  {profile.photos.dance && (
+    <img src={profile.photos.dance} width="180" height="180" alt="Eric Hung dancing" class="about__shot" />
+  )}
 </section>
