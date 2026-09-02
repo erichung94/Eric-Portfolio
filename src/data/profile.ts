@@ -2,11 +2,13 @@ export const profile = {
   name: { first: 'Eric', last: 'Hung' },
   dev: {
     eyebrow: 'Full-stack developer · Minneapolis, MN',
-    tagline: 'dev by day…',
+    // The two taglines are one sentence split across the modes; the capitalised
+    // word echoes the switch label directly above it.
+    tagline: 'Developer by day…',
   },
   dance: {
     eyebrow: 'West Coast Swing · Twin Cities, MN',
-    tagline: '…dancer by night',
+    tagline: '…Dancer by night',
   },
   links: {
     email: 'erichung.94@gmail.com',

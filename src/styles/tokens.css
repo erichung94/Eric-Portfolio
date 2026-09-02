@@ -58,10 +58,15 @@
   --accent-strong: #14477E;
   --accent-on: #FFFFFF;
 
-  /* The masthead band */
+  /* The masthead band. --field is the solid fallback; --field-sky adds a sky
+     gradient, lighter toward the horizon at the bottom, for the "day" read. */
   --field: #0E2A4A;
+  --field-sky: linear-gradient(180deg, #0A2340 0%, #14375F 100%);
   --on-field: #F4F7FB;
   --on-field-muted: rgba(244, 247, 251, 0.68);
+
+  /* Day: warm sun falling from the top right, away from the text column. */
+  --hero-light: radial-gradient(58% 68% at 88% 4%, rgba(255, 206, 138, 0.22), transparent 68%);
 
   /* Type */
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
@@ -99,8 +104,12 @@
   --accent-on: #0A1119;
 
   --field: #070E18;
+  --field-sky: linear-gradient(180deg, #05090F 0%, #0C1728 100%);
   --on-field: #EEF1F6;
   --on-field-muted: rgba(238, 241, 246, 0.66);
+
+  /* Night: a cool pool of stage light over the photo column, not the text. */
+  --hero-light: radial-gradient(48% 62% at 18% 44%, rgba(150, 186, 236, 0.16), transparent 70%);
 }
 
 /* Theme transition: only active while the .theme-transition class is on <html> */

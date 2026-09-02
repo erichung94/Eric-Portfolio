@@ -11,6 +11,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 img, picture, svg { display: block; max-width: 100%; }
+/* `clip` rather than `hidden`: it contains the hero's bleeding light source
+   without becoming a scroll container, so the sticky header still works. */
+main { overflow-x: clip; }
 a { color: var(--accent-strong); }
 h1, h2, h3 { text-wrap: balance; }
 
@@ -44,7 +47,8 @@ h1, h2, h3 { text-wrap: balance; }
    =========================================================================== */
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: var(--field);
+  background-color: var(--field);
+  background-image: var(--field-sky);
   border-bottom: 1px solid rgba(244, 247, 251, 0.10);
   --switch-scale: 2.4;
   --nav-scale: 1.5;
@@ -102,10 +106,21 @@ h1, h2, h3 { text-wrap: balance; }
 /* ===========================================================================
    HERO
    =========================================================================== */
+/* The light source is the day/night cue: warm sun from the top right in dev,
+   a cool pool of stage light over the photo column in dance. Both are placed
+   away from the text column so they never sit under running copy. */
 .hero {
+  position: relative;
   display: grid; grid-template-columns: 1fr 230px;
   gap: clamp(28px, 4vw, 52px); align-items: center;
   padding-block: clamp(44px, 7vw, 84px) clamp(28px, 4vw, 48px);
+}
+/* The glow bleeds past the content column so the light source is never cut off
+   by a hard edge. `overflow-x: clip` on <main> contains that bleed without
+   creating a scroll container, so no sideways scrollbar on narrow screens. */
+.hero::before {
+  content: ""; position: absolute; inset: -14% -22% -18%;
+  background: var(--hero-light); pointer-events: none; z-index: -1;
 }
 .hero--dance { grid-template-columns: 230px 1fr; }
 .hero--dance .hero__text { text-align: right; order: 2; }
@@ -134,8 +149,13 @@ h1, h2, h3 { text-wrap: balance; }
   font-variation-settings: "opsz" 120;
 }
 .hero__name em { font-style: italic; }
+/* The two taglines are one sentence split across the modes, so they carry more
+   weight than a subtitle usually would. Serif, near-full-strength, and set at
+   the section-heading size rather than body size. */
 .hero__tagline {
-  color: var(--fg-muted); margin-top: 16px; font-size: var(--step-1);
+  font-family: var(--font-display); font-weight: 300;
+  font-size: var(--step-2); line-height: 1.2; letter-spacing: -0.01em;
+  color: var(--fg); margin-top: 18px;
 }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 .hero__shot {
