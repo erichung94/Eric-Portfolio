@@ -84,18 +84,16 @@
   --sky-day:
     linear-gradient(180deg, #6FA8DC 0%, #A8CDEA 46%, #DCE9F2 82%, #EFE0C8 100%);
 
-  /* Night sky: cold, empty, starlit. No warm glow up here; at night the warm
-     light comes from below, not from the sky. */
+  /* Night sky: cold and empty overhead, with a warm glow low on the horizon.
+     That glow is light pollution, which is what an urban night sky actually
+     looks like, and it makes the two skies rhyme: both carry warmth at the
+     horizon and cool above it, one lit by the sun and one by the city. Stars
+     were the earlier version and came out; they encoded nothing, they were the
+     most predictable possible night signifier, and as fixed points they
+     squashed into a band when the header collapsed on scroll. */
   --sky-night:
-    radial-gradient(1.6px 1.6px at 11% 34%, rgba(255, 255, 255, 0.50), transparent),
-    radial-gradient(1.2px 1.2px at 23% 17%, rgba(255, 255, 255, 0.34), transparent),
-    radial-gradient(1.4px 1.4px at 37% 44%, rgba(255, 255, 255, 0.28), transparent),
-    radial-gradient(1px 1px at 49% 22%, rgba(255, 255, 255, 0.40), transparent),
-    radial-gradient(1.6px 1.6px at 63% 38%, rgba(255, 255, 255, 0.30), transparent),
-    radial-gradient(1.2px 1.2px at 74% 15%, rgba(255, 255, 255, 0.44), transparent),
-    radial-gradient(1px 1px at 86% 41%, rgba(255, 255, 255, 0.26), transparent),
-    radial-gradient(1.4px 1.4px at 94% 26%, rgba(255, 255, 255, 0.36), transparent),
-    linear-gradient(180deg, #02040A 0%, #0A1020 100%);
+    radial-gradient(130% 62% at 58% 126%, rgba(232, 156, 74, 0.26), transparent 58%),
+    linear-gradient(180deg, #02040A 0%, #050A14 50%, #0A1220 100%);
 
   /* The warm pool of stage light. Present in the markup always, faded to zero
      by day: even ambient light is expressed as the absence of a pool. */
