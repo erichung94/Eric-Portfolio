@@ -18,7 +18,11 @@ export const profile = {
   // renders without an image rather than showing a placeholder box.
   photos: {
     dev: '/images/headshot-dev.jpg',
-    dance: '', // Eric to supply
+    // PLACEHOLDER: the dev headshot standing in so the mirrored dance layout can
+    // be seen. Replace with a real dance photo before launch (see docs/DEPLOY.md)
+    // and drop the .hero--dance .hero__shot mirror rule in global.css if the new
+    // photo should not be flipped.
+    dance: '/images/headshot-dev.jpg',
   },
   resume: '/EricHung_Resume.pdf',
 } as const;

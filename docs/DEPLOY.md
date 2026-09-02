@@ -73,7 +73,13 @@ pointing `erichung.dev` at it:
 
 - `src/components/AboutDev.astro` — real bio (currently Lorem ipsum)
 - `src/components/AboutDance.astro` — real dance bio (currently Lorem ipsum)
-- `public/images/headshot.png` — real headshot (currently a flat grey square)
+- **`src/data/profile.ts` `photos.dance`** — currently points at the DEV headshot
+  as a placeholder so the mirrored dance layout can be seen. It is not a dance
+  photo and the alt text says "Eric Hung dancing", so this must be swapped for a
+  real one before the domain goes live. While replacing it, decide whether to
+  keep the `.hero--dance .hero__shot` `scaleX(-1)` mirror in `global.css`; it
+  makes the subject face into the copy, but it will reverse a recognisable
+  lead/follow position.
 - `public/images/og-dev.png`, `public/images/og-dance.png` — real 1200×630 social
   cards (currently solid-colour blanks; a blank card is worse than none on
   LinkedIn). If real images will take a while, temporarily remove the
