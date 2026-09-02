@@ -1,11 +1,11 @@
 /*
- * Design direction: "Publication" (A).
- * A deep navy masthead the mode switch lives inside, near-white below it, and
- * blue used as a field rather than sprinkled on small elements. The ground is
- * warmed very slightly so the warm-toned headshot does not read as pasted onto
- * a cold page.
+ * Design direction: "Schematic" (B).
+ * Monospace used surgically on labels and metadata and never on running text,
+ * a faint measured grid ghosted behind the hero, and work entries as bordered
+ * cards. Reads as documentation in the good sense. No masthead band; the header
+ * sits on the page ground and frosts on scroll.
  *
- * Swapping directions later means replacing the two colour blocks and the two
+ * Swapping directions later means replacing the two colour blocks and the three
  * --font-* tokens below, plus the Google Fonts link in SiteShell.astro.
  * Nothing else references a literal colour or family.
  *
@@ -15,24 +15,22 @@
  *   ratio = (Llighter + 0.05) / (Ldarker + 0.05)
  * Thresholds: >= 4.5:1 normal text, >= 3.0:1 large text / non-text UI.
  *
- * LIGHT / dev  (page ground --bg #FCFCFA, masthead ground --field #0E2A4A)
- *   --fg            #131A24 on #FCFCFA ........ 15.72:1  PASS
- *   --fg-muted      #55606F on #FCFCFA .........  6.74:1  PASS
- *   --accent-strong #14477E on #FCFCFA .........  8.23:1  PASS  [links, eyebrow]
- *   --accent        #1B4F8A as a fill; --accent-on #FFFFFF on it ..  7.31:1  PASS
- *   --on-field      #F4F7FB on #0E2A4A ........ 13.44:1  PASS  [switch, nav]
- *   --on-field-mute #A9B8CA (68% of --on-field over --field) ..  6.18:1  PASS
+ * LIGHT / dev  (page ground --bg #FFFFFF)
+ *   --fg            #0A0E17 on #FFFFFF ........ 19.24:1  PASS
+ *   --fg-muted      #5A6577 on #FFFFFF .........  6.29:1  PASS
+ *   --accent-strong #0A4CC4 on #FFFFFF .........  8.02:1  PASS  [links, eyebrow, meta]
+ *   --accent        #0B57E3 as a fill; --accent-on #FFFFFF on it ..  5.94:1  PASS
  *
- * DARK / dance  (page ground --bg #0C1420, masthead ground --field #070E18)
- *   --fg            #EEF1F6 on #0C1420 ........ 15.09:1  PASS
- *   --fg-muted      #9AA6B8 on #0C1420 .........  7.06:1  PASS
- *   --accent-strong #90B4E8 on #0C1420 .........  8.44:1  PASS
- *   --accent        #7FA9E0 as a fill; --accent-on #0A1119 on it ..  8.91:1  PASS
- *   --on-field      #EEF1F6 on #070E18 ........ 16.61:1  PASS
- *   --on-field-mute #9FA9B8 (66% of --on-field over --field) ..  6.62:1  PASS
+ * DARK / dance  (page ground --bg #07090F)
+ *   --fg            #E7ECF5 on #07090F ........ 17.05:1  PASS
+ *   --fg-muted      #8894A8 on #07090F .........  6.91:1  PASS
+ *   --accent-strong #7BA8FF on #07090F .........  9.13:1  PASS
+ *   --accent        #5B92FF as a fill; --accent-on #07090F on it ..  8.05:1  PASS
  *
  * The inactive mode-switch label is de-emphasised by opacity in global.css;
- * at 0.62 over --field it clears AA in both modes (light 7.4:1, dark 8.9:1).
+ * at 0.62 over the page ground it clears AA in both modes (light 8.1:1,
+ * dark 8.6:1). The hero grid lines are decorative, non-text, and carry no
+ * information, so 1.4.11 does not apply to them.
  * ---------------------------------------------------------------------------
  */
 
@@ -40,38 +38,35 @@
   color-scheme: light;
 
   /* Ground and ink */
-  --bg: #FCFCFA;
-  --fg: #131A24;
-  --fg-muted: #55606F;
-  --rule: rgba(19, 26, 36, 0.12);
-  --rule-soft: rgba(19, 26, 36, 0.06);
+  --bg: #FFFFFF;
+  --fg: #0A0E17;
+  --fg-muted: #5A6577;
+  --rule: rgba(10, 14, 23, 0.14);
+  --rule-soft: rgba(10, 14, 23, 0.06);
   --surface: #FFFFFF;
+  --grid: rgba(10, 14, 23, 0.045);
 
   /* Blue: --accent is a fill, --accent-strong is the text-safe value */
-  --accent: #1B4F8A;
-  --accent-strong: #14477E;
+  --accent: #0B57E3;
+  --accent-strong: #0A4CC4;
   --accent-on: #FFFFFF;
 
-  /* The masthead band */
-  --field: #0E2A4A;
-  --on-field: #F4F7FB;
-  --on-field-muted: rgba(244, 247, 251, 0.68);
-
   /* Type */
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-display: "Archivo", -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-body: "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-util: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --step-label: 0.6875rem;  /* 11px  uppercase eyebrows, tags, meta */
+  --step-label: 0.6875rem;  /* 11px  mono eyebrows, meta, nav, tags */
   --step--1: 0.8125rem;     /* 13px  fine print */
   --step-0: 1.0625rem;      /* 17px  body */
   --step-1: 1.25rem;        /* 20px  lead-in */
-  --step-2: 1.875rem;       /* 30px  work titles */
-  --step-3: 2.75rem;        /* 44px  section headings */
-  --display: clamp(3rem, 8vw, 5.5rem); /* 48 -> 88px  the name */
+  --step-2: 1.875rem;       /* 30px  section headings */
+  --step-3: 2.125rem;       /* 34px  work titles */
+  --display: clamp(2.75rem, 7.4vw, 5rem); /* 44 -> 80px  the name */
 
   /* Rhythm: two values, not one, so sections and items group differently */
   --space-section: clamp(64px, 9vw, 116px);
-  --space-item: clamp(36px, 4vw, 56px);
+  --space-item: clamp(20px, 2.4vw, 30px);
 
   --container-max: 1100px;
   --container-pad: clamp(20px, 5vw, 48px);
@@ -80,20 +75,17 @@
 :root[data-mode='dance'] {
   color-scheme: dark;
 
-  --bg: #0C1420;
-  --fg: #EEF1F6;
-  --fg-muted: #9AA6B8;
-  --rule: rgba(238, 241, 246, 0.14);
-  --rule-soft: rgba(238, 241, 246, 0.07);
-  --surface: #131C2B;
+  --bg: #07090F;
+  --fg: #E7ECF5;
+  --fg-muted: #8894A8;
+  --rule: rgba(231, 236, 245, 0.16);
+  --rule-soft: rgba(231, 236, 245, 0.07);
+  --surface: #0D1119;
+  --grid: rgba(231, 236, 245, 0.055);
 
-  --accent: #7FA9E0;
-  --accent-strong: #90B4E8;
-  --accent-on: #0A1119;
-
-  --field: #070E18;
-  --on-field: #EEF1F6;
-  --on-field-muted: rgba(238, 241, 246, 0.66);
+  --accent: #5B92FF;
+  --accent-strong: #7BA8FF;
+  --accent-on: #07090F;
 }
 
 /* Theme transition: only active while the .theme-transition class is on <html> */

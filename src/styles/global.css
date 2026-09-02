@@ -37,23 +37,25 @@ h1, h2, h3 { text-wrap: balance; }
 :root[data-mode='dance'] [data-scope='dev'] { display: none; }
 
 /* ===========================================================================
-   MASTHEAD
-   The signature of this direction: a full-bleed deep navy band the mode switch
-   lives inside. Large on landing, shrinks to a compact bar once you scroll.
-   Everything inside the band draws from --on-field, never --fg.
+   HEADER
+   No band in this direction. The header sits on the page ground, large on
+   landing, and frosts into a compact bar once you scroll past the hero.
    =========================================================================== */
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: var(--field);
-  border-bottom: 1px solid rgba(244, 247, 251, 0.10);
-  --switch-scale: 2.4;
-  --nav-scale: 1.55;
+  --switch-scale: 2.5;
+  --nav-scale: 1.5;
 }
 .site-header.is-scrolled { --switch-scale: 1; --nav-scale: 1; }
 .site-header__inner { padding-block: 30px 20px; transition: padding 0.28s ease; }
-.site-header.is-scrolled .site-header__inner { padding-block: 13px 11px; }
+.site-header.is-scrolled .site-header__inner {
+  padding-block: 13px 11px;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
 
-/* Mode switch: floating text on the band, no chrome, fading seam */
+/* Mode switch: floating text, no chrome, fading seam */
 .mode-switch { display: flex; justify-content: center; }
 /* Equal-width labels keep the seam on the true centre whichever side is bold;
    baseline alignment keeps both labels on one baseline. */
@@ -61,29 +63,29 @@ h1, h2, h3 { text-wrap: balance; }
 .mode-switch__seam {
   position: absolute; left: 50%; top: -0.12em; translate: -50% 0;
   width: 1px; height: 2.4em; pointer-events: none;
-  background: linear-gradient(to bottom, var(--on-field) 0 20%, transparent 100%);
-  opacity: 0.45;
+  background: linear-gradient(to bottom, currentColor 0 20%, transparent 100%);
+  opacity: 0.4;
 }
 .mode-switch__btn {
   appearance: none; background: none; border: 0; cursor: pointer;
   font-family: var(--font-display);
-  font-size: calc(17px * var(--switch-scale, 1));
-  letter-spacing: -0.005em; color: var(--on-field);
-  padding: 0.1em 1em; line-height: 1.1; opacity: 0.62; font-weight: 400;
+  font-size: calc(16px * var(--switch-scale, 1));
+  letter-spacing: -0.03em; color: var(--fg);
+  padding: 0.1em 1em; line-height: 1.1; opacity: 0.62; font-weight: 500;
   flex: 0 0 auto; min-width: 6.6em; white-space: nowrap;
   transition: font-size 0.28s ease, opacity 0.2s ease;
 }
 /* Hug the divider: each label sits the same distance from the centre seam. */
 .mode-switch__btn[data-mode-target='dev'] { text-align: right; padding-right: 0.85em; }
 .mode-switch__btn[data-mode-target='dance'] { text-align: left; padding-left: 0.85em; }
-.mode-switch__btn:focus-visible { outline: 2px solid var(--on-field); outline-offset: 4px; }
+.mode-switch__btn:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 4px; }
 /* Active styling derives from the live data-mode, not the React prop */
 :root[data-mode='dev'] .mode-switch__btn[data-mode-target='dev'],
 :root[data-mode='dance'] .mode-switch__btn[data-mode-target='dance'] {
-  opacity: 1; font-weight: 600;
+  opacity: 1; font-weight: 700;
 }
 
-/* Section nav, also on the band */
+/* Section nav, monospace */
 .mode-nav {
   display: flex; justify-content: center;
   gap: calc(26px * var(--nav-scale, 1));
@@ -91,20 +93,25 @@ h1, h2, h3 { text-wrap: balance; }
   transition: gap 0.28s ease, margin-top 0.28s ease;
 }
 .mode-nav a {
-  font-size: calc(11px * var(--nav-scale, 1));
-  letter-spacing: 0.13em; text-transform: uppercase; font-weight: 600;
-  color: var(--on-field-muted); text-decoration: none;
+  font-family: var(--font-util);
+  font-size: calc(10.5px * var(--nav-scale, 1));
+  letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500;
+  color: var(--fg-muted); text-decoration: none;
   transition: font-size 0.28s ease, color 0.2s ease;
 }
-.mode-nav a:hover, .mode-nav a:focus-visible { color: var(--on-field); }
+.mode-nav a:hover, .mode-nav a:focus-visible { color: var(--accent-strong); }
 
 /* ===========================================================================
    HERO
+   The measured grid is this direction's signature: decorative, faint, and
+   sized to a real interval rather than a random one.
    =========================================================================== */
 .hero {
   display: grid; grid-template-columns: 1fr 230px;
   gap: clamp(28px, 4vw, 52px); align-items: center;
-  padding-block: clamp(44px, 7vw, 84px) clamp(28px, 4vw, 48px);
+  padding-block: clamp(44px, 7vw, 80px) clamp(28px, 4vw, 48px);
+  background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px);
+  background-size: 44px 100%;
 }
 .hero--dance { grid-template-columns: 230px 1fr; }
 .hero--dance .hero__text { text-align: right; order: 2; }
@@ -116,29 +123,31 @@ h1, h2, h3 { text-wrap: balance; }
 .hero--dance.hero--noshot .hero__cta { justify-content: flex-start; }
 
 .hero__eyebrow {
-  font-size: var(--step-label); letter-spacing: 0.16em; text-transform: uppercase;
-  font-weight: 600; color: var(--accent-strong); margin-bottom: 14px;
+  font-family: var(--font-util);
+  font-size: var(--step-label); letter-spacing: 0.14em; text-transform: uppercase;
+  font-weight: 500; color: var(--accent-strong); margin-bottom: 16px;
 }
 .hero__name {
-  font-family: var(--font-display); font-weight: 400;
-  font-size: var(--display); line-height: 0.98; letter-spacing: -0.025em;
-  font-variation-settings: "opsz" 120;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--display); line-height: 0.96; letter-spacing: -0.042em;
 }
-.hero__name em { font-style: italic; }
+/* Weight contrast rather than italic: this is a grotesque, not a serif */
+.hero__name em { font-style: normal; font-weight: 400; }
 .hero__tagline {
   color: var(--fg-muted); margin-top: 16px; font-size: var(--step-1);
 }
 .hero__cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 .hero__shot {
   width: 230px; aspect-ratio: 4 / 5; height: auto;
-  border-radius: 2px; object-fit: cover; object-position: 50% 50%;
-  background: var(--rule);
+  border-radius: 4px; object-fit: cover; object-position: 50% 50%;
+  background: var(--rule); border: 1px solid var(--rule);
 }
 
 .btn {
-  display: inline-block; font-size: var(--step-label); letter-spacing: 0.09em;
+  display: inline-block; font-family: var(--font-util);
+  font-size: var(--step-label); letter-spacing: 0.08em;
   text-transform: uppercase; font-weight: 700;
-  padding: 0.85em 1.5em; border-radius: 2px; text-decoration: none;
+  padding: 0.85em 1.4em; border-radius: 4px; text-decoration: none;
   background: var(--accent); color: var(--accent-on);
   border: 1px solid var(--accent);
   transition: background 0.16s ease, color 0.16s ease;
@@ -152,60 +161,72 @@ h1, h2, h3 { text-wrap: balance; }
    =========================================================================== */
 .section { padding-top: var(--space-section); }
 .section__title {
-  font-family: var(--font-display); font-weight: 400;
-  font-size: var(--step-3); line-height: 1.05; letter-spacing: -0.02em;
-  color: var(--fg); margin-bottom: clamp(24px, 3vw, 40px);
-  padding-bottom: 14px; border-bottom: 1px solid var(--rule);
+  font-family: var(--font-display); font-weight: 800;
+  font-size: var(--step-2); line-height: 1.1; letter-spacing: 0.02em;
+  text-transform: uppercase; color: var(--fg);
+  margin-bottom: clamp(24px, 3vw, 38px);
+  padding-bottom: 14px; border-bottom: 2px solid var(--fg);
 }
 
+/* Work entries are bordered cards: the schematic move */
 .work { list-style: none; display: grid; gap: var(--space-item); padding: 0; }
+.work__item {
+  border: 1px solid var(--rule); border-radius: 6px;
+  padding: clamp(20px, 3vw, 32px);
+  transition: border-color 0.16s ease;
+}
+.work__item:hover { border-color: var(--accent); }
 .work__meta {
-  font-size: var(--step-label); letter-spacing: 0.13em; text-transform: uppercase;
-  font-weight: 600; color: var(--accent-strong);
+  font-family: var(--font-util);
+  font-size: var(--step-label); letter-spacing: 0.1em; text-transform: uppercase;
+  font-weight: 500; color: var(--accent-strong);
 }
 .work__title {
-  font-family: var(--font-display); font-weight: 600;
-  font-size: var(--step-2); line-height: 1.12; letter-spacing: -0.02em;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: var(--step-3); line-height: 1.12; letter-spacing: -0.03em;
   margin: 8px 0 14px;
 }
 .work__item p { margin-bottom: 8px; max-width: 68ch; color: var(--fg-muted); }
 .work__item p b, .work__item p strong { color: var(--fg); font-weight: 700; }
-.work__tags { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding: 0; }
+.work__tags { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding: 0; }
 .work__tags li {
-  font-size: var(--step-label); letter-spacing: 0.05em; padding: 4px 10px;
-  border: 1px solid var(--rule); border-radius: 2px; color: var(--fg-muted);
+  font-family: var(--font-util);
+  font-size: var(--step-label); letter-spacing: 0.02em; padding: 4px 9px;
+  border: 1px solid var(--rule); border-radius: 4px; color: var(--fg-muted);
 }
 
 .skills { display: grid; gap: 24px; }
 .skills__group dt {
-  font-size: var(--step-label); letter-spacing: 0.13em; text-transform: uppercase;
+  font-family: var(--font-util);
+  font-size: var(--step-label); letter-spacing: 0.1em; text-transform: uppercase;
   font-weight: 700; color: var(--fg-muted); margin-bottom: 10px;
 }
 .skills__list { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; }
 .skills__list li {
-  font-size: var(--step--1); padding: 5px 11px;
-  background: var(--rule-soft); border-radius: 2px;
+  font-family: var(--font-util);
+  font-size: var(--step--1); padding: 5px 10px;
+  background: var(--rule-soft); border: 1px solid var(--rule); border-radius: 4px;
 }
 
 /* `auto` rather than a fixed track, so the column vanishes when a mode has no photo */
 .about { display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: start; }
 .about p { max-width: 68ch; color: var(--fg-muted); }
-.about__shot { border-radius: 2px; object-fit: cover; object-position: 50% 14%; }
+.about__shot { border-radius: 4px; object-fit: cover; object-position: 50% 14%; border: 1px solid var(--rule); }
 
 /* Watch / Lessons */
 .lessons p { max-width: 68ch; color: var(--fg-muted); }
-.lessons__meta { color: var(--fg-muted); margin: 10px 0 22px; }
+.lessons__meta { font-family: var(--font-util); font-size: var(--step--1); color: var(--fg-muted); margin: 12px 0 22px; }
 .watch__soon { color: var(--fg-muted); }
 .watch__videos { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-.watch__video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 2px; }
-.watch__video figcaption { font-size: var(--step--1); color: var(--fg-muted); margin-top: 8px; }
+.watch__video iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 4px; }
+.watch__video figcaption { font-family: var(--font-util); font-size: var(--step--1); color: var(--fg-muted); margin-top: 8px; }
 .watch__gallery { list-style: none; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-top: 22px; padding: 0; }
-.watch__gallery img { border-radius: 2px; width: 100%; }
+.watch__gallery img { border-radius: 4px; width: 100%; }
 
-.contact { list-style: none; display: flex; flex-wrap: wrap; gap: 22px; padding: 0; }
+.contact { list-style: none; display: flex; flex-wrap: wrap; gap: 22px; padding: 0; font-family: var(--font-util); font-size: var(--step--1); }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-header__inner, .mode-switch__btn, .mode-nav, .mode-nav a, .btn { transition: none; }
+  .site-header__inner, .mode-switch__btn, .mode-nav, .mode-nav a, .btn, .work__item { transition: none; }
 }
 
 @media (max-width: 640px) {
