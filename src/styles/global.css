@@ -48,13 +48,28 @@ h1, h2, h3 { text-wrap: balance; }
 .site-header {
   position: sticky; top: 0; z-index: 50;
   background-color: var(--field);
-  background-image: var(--field-sky);
   border-bottom: 1px solid rgba(244, 247, 251, 0.10);
   --switch-scale: 2.4;
   --nav-scale: 1.5;
 }
+/* Both skies are stacked and always present; the mode crossfades their opacity.
+   A CSS transition cannot interpolate a gradient, so fading two static layers
+   is the only way to animate a sky rather than have it snap. */
+.site-header::before,
+.site-header::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  transition: opacity 0.75s ease;
+}
+.site-header::before { background: var(--sky-day); opacity: 1; }
+.site-header::after { background: var(--sky-night); opacity: 0; }
+:root[data-mode='dance'] .site-header::before { opacity: 0; }
+:root[data-mode='dance'] .site-header::after { opacity: 1; }
 .site-header.is-scrolled { --switch-scale: 1; --nav-scale: 1; }
-.site-header__inner { padding-block: 30px 20px; transition: padding 0.28s ease; }
+/* position/z-index keeps the switch and nav above the two sky layers */
+.site-header__inner {
+  position: relative; z-index: 1;
+  padding-block: 30px 20px; transition: padding 0.28s ease;
+}
 .site-header.is-scrolled .site-header__inner { padding-block: 13px 11px; }
 
 /* Mode switch: Fraunces on the band, no chrome, fading seam */
@@ -254,7 +269,8 @@ h1, h2, h3 { text-wrap: balance; }
 .contact { list-style: none; display: flex; flex-wrap: wrap; gap: 22px; padding: 0; font-family: var(--font-util); font-size: var(--step--1); }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-header__inner, .mode-switch__btn, .mode-nav, .mode-nav a, .btn, .work__item { transition: none; }
+  .site-header__inner, .mode-switch__btn, .mode-nav, .mode-nav a, .btn, .work__item,
+  .site-header::before, .site-header::after { transition: none; }
 }
 
 @media (max-width: 640px) {
