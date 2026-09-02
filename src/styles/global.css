@@ -319,5 +319,15 @@ h1, h2, h3 { text-wrap: balance; }
   .mode-nav { flex-wrap: wrap; }
   .hero, .hero--dance { grid-template-columns: 1fr; }
   .hero--dance .hero__text { text-align: left; order: 2; }
+  /* Stacked, the dance side is no longer mirrored, so the CTA has to come back
+     from the right edge with the text it belongs to. text-align does not reach
+     flex children, which is why this needs its own rule. */
+  .hero--dance .hero__cta { justify-content: flex-start; }
+  /* Stacked, the photo is a hard horizontal edge, so the hero does not need its
+     own bottom padding on top of the section rhythm underneath it. Together
+     they were making this the largest gap on the page (92px, against 64px for
+     every other section join) on the screen with the least room to spare. */
+  .hero { padding-bottom: 0; }
+  [data-scope] > .hero + .section { padding-top: 48px; }
   .about { grid-template-columns: 1fr; }
 }
