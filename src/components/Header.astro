@@ -27,8 +27,50 @@ const danceNav = [
 </header>
 <script>
   const header = document.querySelector('.site-header');
-  // Collapse the oversized landing header once you scroll past the top.
-  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 64);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  if (header) {
+    // Collapse the oversized landing header once you scroll past the top.
+    //
+    // Two thresholds rather than one, and the gap between them has to be wider
+    // than the header's own height change.
+    //
+    // The header is sticky, so it occupies flow space. Collapsing sheds ~72px
+    // of that, and Chrome's scroll anchoring keeps the visible content still by
+    // reducing window.scrollY by the same ~72px. Measured:
+    //
+    //   scrollTo(140) -> y=140 headerH=150
+    //   +360ms        -> y= 68 headerH= 78
+    //
+    // So a collapse silently moves the scroll position most of the way back
+    // down. With a single threshold, or with a band no wider than that drift,
+    // the collapse pushes you past the expand threshold, which re-expands the
+    // header, which pushes you back up, which collapses it again. Each flip
+    // restarts the 0.28s size transition from wherever it currently is, so the
+    // header settles at neither size and just wobbles between intermediates.
+    //
+    // A band far wider than the 72px drift is stable in both directions:
+    // collapsing at 200 lands you near 128, still far above EXPAND_AT;
+    // expanding at 16 lands you near 88, still far below COLLAPSE_AT.
+    const COLLAPSE_AT = 200;
+    const EXPAND_AT = 16;
+
+    let collapsed = window.scrollY > COLLAPSE_AT;
+    let queued = false;
+    header.classList.toggle('is-scrolled', collapsed);
+
+    const apply = () => {
+      queued = false;
+      const y = window.scrollY;
+      if (!collapsed && y > COLLAPSE_AT) collapsed = true;
+      else if (collapsed && y < EXPAND_AT) collapsed = false;
+      else return; // inside the band: hold whatever shape we already have
+      header.classList.toggle('is-scrolled', collapsed);
+    };
+
+    // Coalesce bursts of scroll events into one class update per frame.
+    window.addEventListener('scroll', () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(apply);
+    }, { passive: true });
+  }
 </script>

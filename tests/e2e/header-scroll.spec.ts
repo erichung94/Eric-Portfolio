@@ -28,6 +28,41 @@ test.describe('masthead collapse on scroll', () => {
     });
   }
 
+  test('holds its shape inside the hysteresis band', async ({ page }) => {
+    // The collapse and expand thresholds are deliberately far apart (200 / 16),
+    // because collapsing sheds ~72px of sticky header and scroll anchoring
+    // pulls window.scrollY down by the same amount. A band narrower than that
+    // drift lets one collapse carry you past the expand threshold, and the
+    // header flaps between intermediate sizes. Between the two values the
+    // state must not change.
+    await page.goto('/');
+    const header = page.locator('.site-header');
+    const scrollTo = (y: number) => page.evaluate((v) => window.scrollTo(0, v), y);
+
+    await expect(header).not.toHaveClass(/is-scrolled/);
+
+    // Inside the band on the way down: still expanded, not yet collapsed.
+    await scrollTo(120);
+    await expect(header).not.toHaveClass(/is-scrolled/);
+
+    await scrollTo(260);
+    await expect(header).toHaveClass(/is-scrolled/);
+
+    // Back inside the band from above, including past where the anchoring drift
+    // lands us: must stay collapsed rather than flap.
+    await scrollTo(120);
+    await expect(header).toHaveClass(/is-scrolled/);
+    await scrollTo(40);
+    await expect(header).toHaveClass(/is-scrolled/);
+
+    // Only below the lower threshold does it open up again, and it then stays
+    // open even though expanding pushes scrollY back up by ~72px.
+    await scrollTo(5);
+    await expect(header).not.toHaveClass(/is-scrolled/);
+    await page.waitForTimeout(400);
+    await expect(header).not.toHaveClass(/is-scrolled/);
+  });
+
   test('the document is what scrolls, not an inner container', async ({ page }) => {
     await page.goto('/');
     // Guards the `overflow-x: clip` on <main> that contains the hero's light
