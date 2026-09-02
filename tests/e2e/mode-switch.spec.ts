@@ -1,22 +1,6 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+import { switchMode, gotoHydrated } from './helpers';
 
-// Click a switch label and wait for the mode to actually change. The click is
-// retried: a click that lands before the `client:load` React island has hydrated
-// would otherwise do nothing (handler not yet attached) and flake the test.
-async function switchMode(page: Page, label: 'Developer' | 'Dancer', expected: 'dev' | 'dance') {
-  await expect(async () => {
-    await page.getByRole('button', { name: label }).click();
-    await expect(page.locator('html')).toHaveAttribute('data-mode', expected, { timeout: 500 });
-  }).toPass({ timeout: 8000, intervals: [50, 150, 300, 500, 500] });
-}
-
-// Navigate, then guarantee the island is interactive by round-tripping the switch
-// (dev -> dance -> dev). After this returns, clicks are reliable.
-async function gotoHydrated(page: Page, path = '/') {
-  await page.goto(path);
-  await switchMode(page, 'Dancer', 'dance');
-  await switchMode(page, 'Developer', 'dev');
-}
 
 test.describe('mode switch', () => {
   test('swaps theme, content, and URL without reload', async ({ page }) => {

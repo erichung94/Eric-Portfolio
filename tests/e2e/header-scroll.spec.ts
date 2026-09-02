@@ -11,16 +11,20 @@ test.describe('masthead collapse on scroll', () => {
       const header = page.locator('.site-header');
       const label = page.locator('.mode-switch__btn').first();
 
+      // The label size is animated (0.28s), so every size assertion has to poll
+      // rather than sample once, or it reads a mid-transition value.
+      const size = () => label.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+
       await expect(header).not.toHaveClass(/is-scrolled/);
-      const tallSize = await label.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+      const tallSize = await size();
 
       await page.evaluate(() => window.scrollTo(0, 600));
       await expect(header).toHaveClass(/is-scrolled/);
-      const shortSize = await label.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
-      expect(shortSize).toBeLessThan(tallSize);
+      await expect.poll(size).toBeLessThan(tallSize);
 
       await page.evaluate(() => window.scrollTo(0, 0));
       await expect(header).not.toHaveClass(/is-scrolled/);
+      await expect.poll(size).toBe(tallSize);
     });
   }
 
