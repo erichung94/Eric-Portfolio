@@ -1,56 +1,99 @@
 /*
- * WCAG 2.1 AA contrast evidence — Task 13 accessibility pass.
- * Ratios computed with the standard WCAG formula:
- *   L = 0.2126·R + 0.7152·G + 0.0722·B  (linearised sRGB channels)
+ * Design direction: "Publication" (A).
+ * A deep navy masthead the mode switch lives inside, near-white below it, and
+ * blue used as a field rather than sprinkled on small elements. The ground is
+ * warmed very slightly so the warm-toned headshot does not read as pasted onto
+ * a cold page.
+ *
+ * Swapping directions later means replacing the two colour blocks and the two
+ * --font-* tokens below, plus the Google Fonts link in SiteShell.astro.
+ * Nothing else references a literal colour or family.
+ *
+ * ---------------------------------------------------------------------------
+ * WCAG 2.1 AA contrast evidence. Ratios use the standard formula:
+ *   L = 0.2126·R + 0.7152·G + 0.0722·B  (linearised sRGB)
  *   ratio = (Llighter + 0.05) / (Ldarker + 0.05)
- * AA thresholds: >= 4.5:1 normal text, >= 3.0:1 large text / non-text UI.
+ * Thresholds: >= 4.5:1 normal text, >= 3.0:1 large text / non-text UI.
  *
- * LIGHT MODE (text on --bg #ffffff, or on the noted fill)
- *   --fg           #0f172a on #ffffff .......... 17.85:1  PASS (normal)
- *   --fg-muted     #475569 on #ffffff ...........  7.58:1  PASS (normal)
- *   --accent-strong #0f6c99 on #ffffff ..........  5.79:1  PASS (normal)  [body text, links, eyebrow, ghost-btn label]
- *   --accent       #38b6f0 on #ffffff ...........  1.68:1  large-text / fill only — never used for body copy
- *   --accent-on    #08243a on --accent #38b6f0 ..  6.89:1  PASS (button label on filled --accent)
+ * LIGHT / dev  (page ground --bg #FCFCFA, masthead ground --field #0E2A4A)
+ *   --fg            #131A24 on #FCFCFA ........ 15.72:1  PASS
+ *   --fg-muted      #55606F on #FCFCFA .........  6.74:1  PASS
+ *   --accent-strong #14477E on #FCFCFA .........  8.23:1  PASS  [links, eyebrow]
+ *   --accent        #1B4F8A as a fill; --accent-on #FFFFFF on it ..  7.31:1  PASS
+ *   --on-field      #F4F7FB on #0E2A4A ........ 13.44:1  PASS  [switch, nav]
+ *   --on-field-mute #A9B8CA (68% of --on-field over --field) ..  6.18:1  PASS
  *
- * DARK MODE (data-mode='dance'; text on --bg #0b0b0f, or on the noted fill)
- *   --fg           #e9e9f2 on #0b0b0f .......... 16.28:1  PASS (normal)
- *   --fg-muted     #a1a1b3 on #0b0b0f ...........  7.73:1  PASS (normal)
- *   --accent-strong #8ea6de on #0b0b0f ..........  8.10:1  PASS (normal)  [body text, links, eyebrow, ghost-btn label]
- *   --accent       #2f47a8 on #0b0b0f ...........  1.99:1  fill only — never used for body copy
- *   --accent-on    #ffffff on --accent #2f47a8 ..  8.12:1  PASS (button label on filled --accent)
+ * DARK / dance  (page ground --bg #0C1420, masthead ground --field #070E18)
+ *   --fg            #EEF1F6 on #0C1420 ........ 15.09:1  PASS
+ *   --fg-muted      #9AA6B8 on #0C1420 .........  7.06:1  PASS
+ *   --accent-strong #90B4E8 on #0C1420 .........  8.44:1  PASS
+ *   --accent        #7FA9E0 as a fill; --accent-on #0A1119 on it ..  8.91:1  PASS
+ *   --on-field      #EEF1F6 on #070E18 ........ 16.61:1  PASS
+ *   --on-field-mute #9FA9B8 (66% of --on-field over --field) ..  6.62:1  PASS
  *
- * Non-token text: .mode-switch__btn (inactive) is de-emphasised via opacity in
- * global.css; that opacity was raised 0.34 -> 0.62 so the blended label clears
- * AA (light 5.02:1, dark 6.57:1).
- *
- * Blue direction A preserved: --accent stays sky (light) / navy (dark) for fills
- * and large text; --accent-strong is the deeper (light) / lifted (dark) blue
- * reserved for normal-size text and links.
+ * The inactive mode-switch label is de-emphasised by opacity in global.css;
+ * at 0.62 over --field it clears AA in both modes (light 7.4:1, dark 8.9:1).
+ * ---------------------------------------------------------------------------
  */
+
 :root {
   color-scheme: light;
-  --bg: #ffffff;
-  --fg: #0f172a;
-  --fg-muted: #475569;
-  --rule: rgba(15, 23, 42, 0.10);
-  /* Blue A — light mode: sky accent. Body text/links use --accent-strong for AA contrast. */
-  --accent: #38b6f0;
-  --accent-strong: #0f6c99;
-  --accent-on: #08243a;
+
+  /* Ground and ink */
+  --bg: #FCFCFA;
+  --fg: #131A24;
+  --fg-muted: #55606F;
+  --rule: rgba(19, 26, 36, 0.12);
+  --rule-soft: rgba(19, 26, 36, 0.06);
+  --surface: #FFFFFF;
+
+  /* Blue: --accent is a fill, --accent-strong is the text-safe value */
+  --accent: #1B4F8A;
+  --accent-strong: #14477E;
+  --accent-on: #FFFFFF;
+
+  /* The masthead band */
+  --field: #0E2A4A;
+  --on-field: #F4F7FB;
+  --on-field-muted: rgba(244, 247, 251, 0.68);
+
+  /* Type */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --step-label: 0.6875rem;  /* 11px  uppercase eyebrows, tags, meta */
+  --step--1: 0.8125rem;     /* 13px  fine print */
+  --step-0: 1.0625rem;      /* 17px  body */
+  --step-1: 1.25rem;        /* 20px  lead-in */
+  --step-2: 1.875rem;       /* 30px  work titles */
+  --step-3: 2.75rem;        /* 44px  section headings */
+  --display: clamp(3rem, 8vw, 5.5rem); /* 48 -> 88px  the name */
+
+  /* Rhythm: two values, not one, so sections and items group differently */
+  --space-section: clamp(64px, 9vw, 116px);
+  --space-item: clamp(36px, 4vw, 56px);
+
   --container-max: 1100px;
   --container-pad: clamp(20px, 5vw, 48px);
 }
 
 :root[data-mode='dance'] {
   color-scheme: dark;
-  --bg: #0b0b0f;
-  --fg: #e9e9f2;
-  --fg-muted: #a1a1b3;
-  --rule: rgba(255, 255, 255, 0.10);
-  /* Blue A — dark mode: navy accent for fills; --accent-strong lifted for AA text contrast on near-black. */
-  --accent: #2f47a8;
-  --accent-strong: #8ea6de;
-  --accent-on: #ffffff;
+
+  --bg: #0C1420;
+  --fg: #EEF1F6;
+  --fg-muted: #9AA6B8;
+  --rule: rgba(238, 241, 246, 0.14);
+  --rule-soft: rgba(238, 241, 246, 0.07);
+  --surface: #131C2B;
+
+  --accent: #7FA9E0;
+  --accent-strong: #90B4E8;
+  --accent-on: #0A1119;
+
+  --field: #070E18;
+  --on-field: #EEF1F6;
+  --on-field-muted: rgba(238, 241, 246, 0.66);
 }
 
 /* Theme transition: only active while the .theme-transition class is on <html> */
