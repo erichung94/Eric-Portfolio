@@ -1,13 +1,18 @@
 ---
-import { profile } from '../data/profile';
+// No photo here, matching AboutDev: About sits directly under the hero, which
+// already carries the image for this mode. Restore the <img> if About ever gets
+// a distinct photo, and set profile.photos.dance, which is still empty.
 ---
 <section id="dance-about" class="container section about">
   <div>
     <h2 class="section__title">About</h2>
-    <p>Placeholder dance bio. Eric writes this before launch. Lorem ipsum dolor sit
-      amet, consectetur adipiscing elit.</p>
+    <p>I’m an All Star lead in Minnesota. I’ve been dancing West Coast Swing
+      since 2016 and teaching since 2019, first with Longhorn Westies at UT
+      Austin and now at Swingesota.</p>
+    <p>I teach the technical side: footwork, weight transfer, and connection,
+      rather than a catalog of patterns. If you want the newest moves, I’m not
+      your guy. If you have one that keeps not working and you can’t say why,
+      I’d love to take it apart with you until it makes sense in your body.</p>
+    <p>I teach all levels and both roles!</p>
   </div>
-  {profile.photos.dance && (
-    <img src={profile.photos.dance} width="180" height="180" alt="Eric Hung dancing" class="about__shot" />
-  )}
 </section>
