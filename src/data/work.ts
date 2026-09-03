@@ -53,28 +53,4 @@ export const work: CaseStudy[] = [
       "Removed silent failures and repeated retries; follow-ups now send within each lead’s daytime hours.",
     tags: ['Node', 'Scheduling', 'Time zones', 'Reliability'],
   },
-  {
-    slug: 'commissions-reconciliation',
-    title: 'Commissions data reconciliation across a platform migration',
-    org: 'The Moderate Genius',
-    year: '2026',
-    problem:
-      'A migration from Moniflo V1 to V2 left commission records inconsistent between the two systems, so payment tracking did not line up.',
-    build:
-      'Reconciled the two datasets and backfilled the missing data points needed to align commission tracking across versions.',
-    result: 'Payment tracking matched across V1 and V2.',
-    tags: ['PostgreSQL', 'Data migration', 'Reconciliation'],
-  },
-  {
-    slug: 'ericassistant',
-    title: 'EricAssistant: a second-brain workspace',
-    org: 'Personal',
-    year: '2026',
-    problem:
-      'Recurring context (background, priorities, preferences, past decisions) had to be re-explained to an AI assistant every session.',
-    build:
-      'A Claude Code workspace structured as an executive assistant: context files, an append-only decision log, reusable templates, and a place for skills to accrete as workflows repeat.',
-    result: 'The assistant carries context between sessions instead of starting cold.',
-    tags: ['Claude Code', 'Automation', 'Knowledge management'],
-  },
 ];
