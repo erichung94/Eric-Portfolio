@@ -19,10 +19,10 @@ export const work: CaseStudy[] = [
     problem:
       'Technical analysis often lives in fragile spreadsheets that get copied and re-broken every time someone wants a different metric or a different set of stocks.',
     build:
-      'A tool that pulls daily price data for a list of tickers, computes 25 technical indicators implemented from their definitions, and runs a hand-written Excel-style formula language so you can define your own indicators as named, reusable columns. The whole setup saves as a template. Streamlit app plus a CLI; CSV and Excel export.',
+      'A tool that pulls daily price data for a list of tickers, computes 25 technical indicators implemented from their definitions, and runs an Excel-style formula language so you can define your own indicators as named, reusable columns. The whole setup saves as a template. Streamlit app plus a CLI; CSV and Excel export.',
     result:
-      'The metrics and the custom math are defined once and re-run on demand. Around 300 tests, roughly 94% line coverage, an independent review pass after each build phase.',
-    tags: ['Python', 'pandas', 'Streamlit', 'Parser', 'Test-driven'],
+      'The metrics and the custom math are defined once and re-run on demand. Shipped at v1.0.0 and public on GitHub.',
+    tags: ['Python', 'pandas', 'Streamlit', 'Parser'],
     links: [
       { label: 'Source', href: 'https://github.com/erichung94/stock-indicator-tool' },
     ],
