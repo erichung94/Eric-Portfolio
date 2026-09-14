@@ -21,7 +21,7 @@ export const work: CaseStudy[] = [
     build:
       'A tool that pulls daily price data for a list of tickers, computes 25 technical indicators implemented from their definitions, and runs an Excel-style formula language so you can define your own indicators as named, reusable columns. The whole setup saves as a template. Streamlit app plus a CLI; CSV and Excel export.',
     result:
-      'The metrics and the custom math are defined once and re-run on demand. Shipped at v1.0.0 and public on GitHub.',
+      'The metrics and the custom math are defined once and re-run on demand. An open project I am still working on, with the source on GitHub.',
     tags: ['Python', 'pandas', 'Streamlit', 'Parser'],
     links: [
       { label: 'Source', href: 'https://github.com/erichung94/stock-indicator-tool' },
